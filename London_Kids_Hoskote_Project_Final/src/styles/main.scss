@@ -1,0 +1,1136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    // Enhanced Brand Colors (Neuro-Optimized for Education: Trust, Growth, Creativity, Calm)
+    --color-primary: #3B82F6; // Soft Blue (Trust & Intelligence) - HSL: 217 91% 60%
+    --color-primary-dark: #2563EB; // Deeper Blue for interaction
+    --color-accent: #F59E0B; // Warm Yellow (Creativity & Optimism) - HSL: 43 96% 56%
+    --color-warm: #EC4899; // Soft Pink (Playfulness & Warmth) - HSL: 327 84% 60%
+    --color-calm: #10B981; // Soft Green (Growth & Harmony) - HSL: 160 84% 39%
+
+    // Modern Neutrals (Accessible Slate Palette)
+    --color-neutral-900: #0F172A; // Dark Slate (High contrast)
+    --color-neutral-700: #334155; // Medium Slate
+    --color-neutral-500: #64748B; // Light Slate
+    --color-bg: #F8FAFC; // Soft White background
+
+    // ============================================
+    // 📏 8-POINT SPACING SCALE (Modern Best Practice)
+    // Creates consistent visual rhythm across all sections
+    // ============================================
+    --space-1: 0.25rem; // 4px - micro spacing
+    --space-2: 0.5rem; // 8px - tight spacing
+    --space-3: 0.75rem; // 12px
+    --space-4: 1rem; // 16px - base unit
+    --space-5: 1.25rem; // 20px
+    --space-6: 1.5rem; // 24px - element gaps
+    --space-8: 2rem; // 32px - component gaps
+    --space-10: 2.5rem; // 40px
+    --space-12: 3rem; // 48px - section inner
+    --space-16: 4rem; // 64px - section padding
+    --space-20: 5rem; // 80px - section spacing (min)
+    --space-24: 6rem; // 96px - section spacing
+    --space-30: 7.5rem; // 120px - section spacing (max)
+
+    // ============================================
+    // 📐 SECTION SPACING TOKENS
+    // Standard section padding: 80-120px
+    // ============================================
+    --section-padding-xs: var(--space-12); // 48px - compact sections
+    --section-padding-sm: var(--space-16); // 64px - small sections
+    --section-padding-md: var(--space-20); // 80px - standard sections
+    --section-padding-lg: var(--space-24); // 96px - large sections
+    --section-padding-xl: var(--space-30); // 120px - hero/CTA sections
+
+    // Section gap between elements
+    --section-gap-sm: var(--space-8); // 32px
+    --section-gap-md: var(--space-12); // 48px
+    --section-gap-lg: var(--space-16); // 64px
+
+    // ============================================
+    // 🔲 12-COLUMN GRID SYSTEM
+    // Desktop: 12 cols, 24px gutters, 32px margins
+    // ============================================
+    --grid-columns: 12;
+    --grid-gutter: 24px;
+    --grid-margin-desktop: 32px;
+    --grid-margin-tablet: 20px;
+    --grid-margin-mobile: 16px;
+    --container-max: 1280px;
+
+    // Typography Psychology Palette (Education-Focused)
+    --typo-trust: #3B82F6; // Blue for trust
+    --typo-growth: #10B981; // Green for growth
+    --typo-creativity: #F59E0B; // Yellow for creativity
+    --typo-playful: #EC4899; // Pink for playfulness
+    --typo-wisdom: #7C3AED; // Purple for wisdom
+    --typo-cream: #FEF7ED; // Warm cream
+
+    // Tailwind CSS Variables (HSL format for education theme)
+    --background: 40 100% 92%; // Warmer cream (more visible)
+    --foreground: 215 25% 27%; // Dark slate
+    --card: 0 0% 100%; // White
+    --card-foreground: 215 25% 27%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 27%;
+    --primary: 217 91% 60%; // Soft blue
+    --primary-foreground: 0 0% 100%; // White
+    --secondary: 160 84% 39%; // Soft green
+    --secondary-foreground: 0 0% 100%;
+    --muted: 35 40% 96%; // Very light warm neutral
+    --muted-foreground: 215 16% 47%;
+    --footer-bg: 215 16% 12%; // Dark footer
+    --footer-foreground: 0 0% 100%;
+    --accent: 43 96% 56%; // Warm yellow
+    --accent-foreground: 215 25% 27%;
+    --destructive: 0 84% 60%; // Red for errors
+    --destructive-foreground: 0 0% 100%;
+    --border: 215 20% 90%;
+    --input: 215 20% 90%;
+    --ring: 217 91% 60%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 215 25% 27%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 43 96% 56%;
+    --sidebar-accent-foreground: 215 25% 27%;
+    --sidebar-border: 215 20% 90%;
+    --sidebar-ring: 217 91% 60%;
+
+    // Animation Shadows (Updated for new colors)
+    --shadow-primary-soft: rgba(59, 130, 246, 0.2); // Blue low opacity
+    --shadow-primary-strong: rgba(59, 130, 246, 0.4); // Blue medium opacity
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Nunito', 'Inter', sans-serif;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    line-height: 1.7;
+    font-size: 18px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+// ============================================
+// 📐 SECTION LAYOUT UTILITIES (Best Practices)
+// Standardized section padding: 80-120px
+// Alternating backgrounds for visual rhythm
+// ============================================
+
+// Skip link for accessibility (keyboard navigation)
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: var(--space-3) var(--space-6);
+    background: var(--color-primary);
+    color: white;
+    border-radius: 0 0 8px 8px;
+    z-index: 9999;
+    font-weight: 700;
+    text-decoration: none;
+    transition: top 0.3s ease;
+
+    &:focus {
+        top: 0;
+    }
+}
+
+// Base section styles
+.section {
+    padding: var(--section-padding-md) var(--grid-margin-desktop);
+
+    @media (max-width: 768px) {
+        padding: var(--section-padding-sm) var(--grid-margin-mobile);
+    }
+}
+
+// Section size variants
+.section--sm {
+    padding-block: var(--section-padding-sm);
+}
+
+.section--lg {
+    padding-block: var(--section-padding-lg);
+}
+
+.section--xl {
+    padding-block: var(--section-padding-xl);
+}
+
+// Hero section (100vh viewport)
+.section--hero {
+    min-height: 100vh;
+    min-height: 100dvh; // Dynamic viewport height for mobile
+    padding-block: var(--section-padding-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// Alternating section backgrounds (visual rhythm)
+.section--light {
+    background: hsl(var(--card));
+}
+
+.section--muted {
+    background: linear-gradient(180deg, #FFFFFF, hsl(var(--background)));
+}
+
+.section--gradient {
+    background: linear-gradient(135deg, #F0F4FF, #E8F5E9);
+}
+
+.section--dark {
+    background: hsl(var(--footer-bg));
+    color: hsl(var(--footer-foreground));
+}
+
+// Container for consistent max-width
+.container {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--grid-margin-desktop);
+
+    @media (max-width: 768px) {
+        padding-inline: var(--grid-margin-mobile);
+    }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    color: var(--color-neutral-900); // High Contrast Text
+    letter-spacing: -0.01em;
+    line-height: 1.2; // tighter line height for headings for perceived unity
+    margin-bottom: var(--space-4); // Consistent bottom spacing for cognitive chunking
+}
+
+// Nunito System: Enhanced hierarchy with VISIBLE effects & Fluid Typography
+// Using Major Third Scale (1.25)
+h1 {
+    font-size: clamp(2.5rem, 5vw, 3.5rem); // 40px -> 56px
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-6);
+}
+
+h2 {
+    font-size: clamp(2rem, 4vw, 2.5rem); // 32px -> 40px
+    font-weight: 800;
+    margin-bottom: var(--space-5);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease, text-shadow 0.3s ease;
+
+    &:hover {
+        transform: translateY(-3px) translateZ(0);
+        text-shadow: 0 4px 12px rgba(58, 141, 255, 0.2);
+    }
+}
+
+h3 {
+    font-size: clamp(1.5rem, 3vw, 1.75rem); // 24px -> 28px
+    font-weight: 700;
+    margin-bottom: var(--space-4);
+}
+
+h4 {
+    font-size: clamp(1.25rem, 2vw, 1.5rem); // 20px -> 24px
+    font-weight: 700;
+    margin-bottom: var(--space-3);
+}
+
+h5 {
+    font-size: 1.25rem; // 20px
+    font-weight: 700;
+}
+
+h6 {
+    font-size: 1rem; // 16px
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-neutral-500);
+}
+
+p {
+    margin-bottom: var(--space-4); // Paragraph spacing for readability
+    max-width: 70ch; // Optimal line length (approx 60-75 chars)
+}
+
+.gradient-text {
+    background: linear-gradient(to right, var(--color-primary), var(--color-accent), var(--color-calm));
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shine 8s linear infinite; // Slightly slowed down for smoother repaint
+
+    // Performance & Stability Fixes:
+    // Enforcing strict rendering context to prevent text flicker in Chromium
+    contain: layout paint;
+    display: inline-block;
+
+    // GPU Layer Stabilization
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: background-position;
+
+    // Quality override
+    color: var(--color-primary); // Fallback color
+    -webkit-font-smoothing: antialiased;
+}
+
+@keyframes shine {
+    0% {
+        background-position: 0% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+// Shimmer animation for TDK Group heading
+@keyframes shimmer {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.5; // Slightly reduced for better blending without mix-blend-mode
+
+    // Decoupled Transformation Strategy:
+    // We use CSS variables for parallax and composition to avoid JS/CSS transform conflicts.
+    // This allows the browser's compositor to handle everything in a single pass.
+    --parallax-x: 0px;
+    --parallax-y: 0px;
+
+    // GPU Acceleration & Rendering Stability
+    will-change: transform, border-radius;
+    transform: translate3d(var(--parallax-x), var(--parallax-y), 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+
+    // Animation Composition
+    // We move the primary animations to a pseudo-element to isolate the heavy blur 
+    // from the positioning layer, preventing "popping" during repaints.
+    &::before {
+        content: '';
+        position: absolute;
+        inset: -50px; // Bleed area for blur
+        background: inherit;
+        border-radius: inherit;
+        animation: blob-morph 20s ease-in-out infinite alternate;
+        will-change: border-radius;
+        transform: translateZ(0);
+    }
+}
+
+// Optimized Animation: Simplified to reduce layout recalculations
+@keyframes blob-morph {
+
+    0%,
+    100% {
+        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    }
+
+    33% {
+        border-radius: 50% 60% 70% 40% / 50% 60% 30% 60%;
+    }
+
+    66% {
+        border-radius: 40% 60% 30% 60% / 30% 60% 70% 40%;
+    }
+}
+
+// We remove blob-float to prevent conflict with JS parallax. 
+// Instead, we can add a very subtle idle float via CSS if needed, 
+// but strictly on the same layer to avoid composition depth issues.
+
+// Stagger Delays for Reveal
+.delay-100 {
+    transition-delay: 100ms;
+}
+
+.delay-200 {
+    transition-delay: 200ms;
+}
+
+.delay-300 {
+    transition-delay: 300ms;
+}
+
+.delay-400 {
+    transition-delay: 400ms;
+}
+
+.delay-500 {
+    transition-delay: 500ms;
+}
+
+.delay-600 {
+    transition-delay: 600ms;
+}
+
+// Button Interactions
+.btn-primary {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    color: white;
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-family: 'Nunito', sans-serif;
+    border: none;
+    cursor: pointer;
+
+    // Modern layout & positioning
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    // Transitions
+    // Transitions - removed 'all' to prevent color glitches
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        background 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    // Shine effect element
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200%;
+        height: 100%;
+        background: linear-gradient(105deg,
+                transparent 20%,
+                rgba(255, 255, 255, 0.2) 25%,
+                transparent 30%);
+        transform: skewX(-45deg) translateX(-100%);
+        transition: transform 0.6s;
+        z-index: -1;
+    }
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px -3px rgba(58, 141, 255, 0.4),
+            0 4px 6px -2px rgba(58, 141, 255, 0.2); // Colored shadow (Bloom)
+
+        &::after {
+            transform: skewX(-45deg) translateX(100%);
+        }
+    }
+
+    &:active {
+        transform: translateY(-1px);
+        box-shadow: 0 5px 10px -3px rgba(58, 141, 255, 0.3);
+    }
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+    color: var(--color-primary);
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-family: 'Nunito', sans-serif;
+    border: 2px solid var(--color-primary);
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        background 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+
+    &:hover {
+        background: var(--color-primary);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px -3px rgba(58, 141, 255, 0.3);
+    }
+
+    &:active {
+        transform: translateY(-1px);
+    }
+}
+
+// Card Interactions
+.card-hover {
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1); // Specific properties
+    will-change: transform;
+
+    // Glassmorphism potential
+    &.glass {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+// ============================================
+// 🔄 Spin Animation for Teacher Image Borders
+// ============================================
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// ============================================
+// 📍 Navigation Link Hover Effects
+// ============================================
+.desktop-nav a {
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--color-primary), var(--color-calm));
+        border-radius: 2px;
+        transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    &:hover {
+        color: var(--color-primary) !important;
+
+        &::after {
+            width: 100%;
+        }
+    }
+}
+
+// ============================================
+// 📊 Progress Bar Shine Animation
+// ============================================
+@keyframes progress-shine {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+// Progress bars in program cards - add shine effect
+div[style*="linear-gradient(90deg, #3A8DFF, #7BD389)"] {
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 255, 255, 0.4),
+                transparent);
+        animation: progress-shine 2s ease-in-out infinite;
+    }
+}
+
+// ============================================
+// 🖼️ Image Hover Effects
+// ============================================
+img[alt*="program"],
+img[alt*="Program"],
+img[alt*="Children"] {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+        transform: scale(1.05);
+    }
+}
+
+// Teacher images - enhanced hover
+img[alt*="Rodriguez"],
+img[alt*="Kim"],
+img[alt*="Walsh"] {
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+        transform: scale(1.08);
+        box-shadow:
+            0 20px 40px rgba(58, 141, 255, 0.25),
+            0 0 60px rgba(58, 141, 255, 0.15);
+    }
+}
+
+
+// ============================================
+// 🪟 Modal Animation Classes
+// ============================================
+@keyframes modal-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modal-slide-up {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+// ============================================
+// 🔘 Enhanced Button States
+// ============================================
+.btn-primary,
+.btn-secondary {
+
+    // Add subtle pulse on focus
+    &:focus {
+        outline: none;
+        box-shadow:
+            0 0 0 3px rgba(58, 141, 255, 0.3),
+            0 10px 20px -3px rgba(58, 141, 255, 0.4);
+    }
+}
+
+
+
+// ============================================
+// 🏷️ Badge/Tag Hover Effects  
+// ============================================
+span[style*="border-radius: 9999px"][style*="font-weight: 700"] {
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+}
+
+// ============================================
+// 📝 Form Input Focus Effects
+// ============================================
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"] {
+    transition:
+        border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:focus {
+        box-shadow:
+            0 0 0 4px rgba(58, 141, 255, 0.15),
+            0 4px 12px rgba(58, 141, 255, 0.1);
+    }
+}
+
+// ============================================
+// 🔗 Footer Link Hover Effects
+// ============================================
+footer a {
+    transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+        color: var(--color-primary) !important;
+    }
+}
+
+// ============================================
+// 🌟 Stats Counter Animation Class
+// ============================================
+.stat-counter {
+    display: inline-block;
+    animation: stat-pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes stat-pop {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+// ============================================
+// 🎬 FRAMER MOTION-INSPIRED SCROLL ANIMATIONS
+// Performance-optimized with GPU acceleration
+// ============================================
+
+// --- Animation Variables for Stagger (Moved to top) ---
+
+// --- Base Reveal State (GPU-Optimized, Text Glitch Fix) ---
+.reveal {
+    opacity: 0;
+    will-change: opacity, transform;
+    transform: translateZ(0); // GPU acceleration
+    backface-visibility: hidden; // Prevents text flicker
+    -webkit-backface-visibility: hidden;
+    perspective: 1000px; // Smoother 3D transforms
+    -webkit-font-smoothing: antialiased; // Crisp text during animation
+    -moz-osx-font-smoothing: grayscale;
+    transition:
+        opacity var(--animation-duration) var(--smooth-easing) var(--stagger-delay),
+        transform var(--animation-duration) var(--smooth-easing) var(--stagger-delay);
+    // NOTE: Removed 'filter' from transition - causes text rendering glitches
+}
+
+// --- Active State ---
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0) translateX(0) scale(1) translateZ(0);
+    will-change: auto; // Release GPU layer after animation
+}
+
+// --- Fade Up (Default) ---
+.reveal,
+.reveal.fade-up {
+    transform: translateY(40px) translateZ(0);
+}
+
+// --- Fade Down ---
+.reveal.fade-down {
+    transform: translateY(-40px) translateZ(0);
+}
+
+// --- Fade Left (From Right) ---
+.reveal.fade-left {
+    transform: translateX(60px) translateZ(0);
+}
+
+// --- Fade Right (From Left) ---
+.reveal.fade-right {
+    transform: translateX(-60px) translateZ(0);
+}
+
+// --- Scale In ---
+.reveal.scale-in {
+    transform: scale(0.85) translateZ(0);
+}
+
+// --- Pop In (Spring Effect) ---
+.reveal.pop-in {
+    transform: scale(0.8) translateY(20px) translateZ(0);
+    transition-timing-function: var(--spring-easing);
+}
+
+// --- Blur Reveal (Reduced blur for better text rendering) ---
+.reveal.blur-in {
+    transform: translateY(20px) translateZ(0);
+    // NOTE: Using CSS animation instead of transition for blur
+    // to avoid text rendering glitches
+    animation: blur-reveal var(--animation-duration) var(--smooth-easing) forwards;
+    animation-play-state: paused;
+
+    &.active {
+        animation-play-state: running;
+    }
+}
+
+@keyframes blur-reveal {
+    0% {
+        filter: blur(8px);
+        opacity: 0;
+        transform: translateY(20px) translateZ(0);
+    }
+
+    100% {
+        filter: blur(0);
+        opacity: 1;
+        transform: translateY(0) translateZ(0);
+    }
+}
+
+// --- Slide In Left ---
+.reveal.slide-left {
+    transform: translateX(-100px) translateZ(0);
+    opacity: 0;
+}
+
+// --- Slide In Right ---
+.reveal.slide-right {
+    transform: translateX(100px) translateZ(0);
+    opacity: 0;
+}
+
+// --- Rotate In ---
+.reveal.rotate-in {
+    transform: rotate(-5deg) scale(0.95) translateZ(0);
+}
+
+// --- Zoom In ---
+.reveal.zoom-in {
+    transform: scale(0.5) translateZ(0);
+}
+
+// --- Flip In ---
+.reveal.flip-in {
+    transform: perspective(1000px) rotateX(-15deg) translateY(30px) translateZ(0);
+    transform-origin: center top;
+}
+
+// --- Stagger Children Support ---
+.stagger-children {
+    >.reveal:nth-child(1) {
+        --stagger-delay: 0ms;
+    }
+
+    >.reveal:nth-child(2) {
+        --stagger-delay: 100ms;
+    }
+
+    >.reveal:nth-child(3) {
+        --stagger-delay: 200ms;
+    }
+
+    >.reveal:nth-child(4) {
+        --stagger-delay: 300ms;
+    }
+
+    >.reveal:nth-child(5) {
+        --stagger-delay: 400ms;
+    }
+
+    >.reveal:nth-child(6) {
+        --stagger-delay: 500ms;
+    }
+
+    >.reveal:nth-child(7) {
+        --stagger-delay: 600ms;
+    }
+
+    >.reveal:nth-child(8) {
+        --stagger-delay: 700ms;
+    }
+}
+
+// --- Parallax Section Background ---
+.parallax-section {
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    will-change: background-position;
+}
+
+// --- Section Reveal with Gradient Line ---
+.section-reveal {
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        height: 3px;
+        width: 0;
+        background: linear-gradient(90deg, var(--color-primary), var(--color-calm), var(--color-accent));
+        transform: translateX(-50%);
+        transition: width 0.8s var(--smooth-easing) 0.2s;
+        border-radius: 2px;
+    }
+
+    &.active::before {
+        width: 120px;
+    }
+}
+
+// --- Card Lift Effect on Scroll ---
+.card-reveal {
+    opacity: 0;
+    transform: translateY(50px) scale(0.95) translateZ(0);
+    transition: all 0.5s var(--spring-easing);
+
+    &.active {
+        opacity: 1;
+        transform: translateY(0) scale(1) translateZ(0);
+    }
+}
+
+// --- Text Highlight Animation ---
+.text-highlight-reveal {
+    background-size: 0 100%;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(transparent 60%, rgba(59, 130, 246, 0.2) 40%);
+    transition: background-size 0.5s var(--smooth-easing);
+
+    &.active {
+        background-size: 100% 100%;
+    }
+}
+
+// --- Counter Animation ---
+.counter-reveal {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9) translateZ(0);
+    transition: all 0.4s var(--spring-easing);
+
+    &.active {
+        opacity: 1;
+        transform: translateY(0) scale(1) translateZ(0);
+    }
+}
+
+// --- Image Reveal with Mask ---
+.image-reveal {
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, var(--color-primary), var(--color-calm));
+        transform: translateX(0);
+        transition: transform 0.8s var(--smooth-easing);
+    }
+
+    &.active::after {
+        transform: translateX(100%);
+    }
+}
+
+// --- Floating Animation (Continuous) ---
+.float-continuous {
+    animation: floating 6s ease-in-out infinite;
+}
+
+@keyframes floating {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+// --- Glow Pulse ---
+.glow-pulse {
+    animation: glow-pulse 3s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 40px rgba(59, 130, 246, 0.4), 0 0 60px rgba(59, 130, 246, 0.2);
+    }
+}
+
+// --- Scroll Progress Indicator Styling ---
+.scroll-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-calm), var(--color-accent));
+    z-index: 9999;
+    width: 0%;
+    transition: width 0.1s ease-out;
+    will-change: width;
+}
+
+// ============================================
+// ♿ Accessibility: Reduced Motion
+// ============================================
+@media (prefers-reduced-motion: reduce) {
+
+    .reveal,
+    .card-reveal,
+    .counter-reveal,
+    .section-reveal,
+    .text-highlight-reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        transition: none !important;
+    }
+
+    .float-continuous,
+    .glow-pulse {
+        animation: none !important;
+    }
+
+    * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+
+// ============================================
+// 🎨 TYPOGRAPHY PSYCHOLOGY SYSTEM
+// Applies to EXISTING elements via selectors
+// NO HTML CHANGES REQUIRED
+// ============================================
+
+
+
+// --- Enhanced Card Styling (Clean & Soft) ---
+// Targets specific card elements, NOT section headers
+#programs .card-hover,
+#features .card-hover,
+#teachers .gap-8>div {
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border)); // Subtle border
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); // Modern soft shadow
+    border-radius: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); // Deep soft shadow
+    }
+}
+
+// --- Footer Styling for Education Theme ---
+footer {
+    background: hsl(var(--footer-bg));
+    color: hsl(var(--footer-foreground));
+    border-top: 1px solid hsl(var(--border));
+}
+
+// --- Header Styling for Education Theme ---
+header {
+    background: rgba(59, 130, 246, 0.06);
+    /* subtle blue tint */
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid hsl(var(--border));
+}
+
+// --- Button Typography & Style ---
+button,
+.btn,
+a[style*="background"] {
+    font-family: 'Nunito', sans-serif !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+
+    &:hover {
+        transform: translate(-2px, -2px) !important;
+        box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2) !important;
+    }
+
+    &:active {
+        transform: translate(0, 0) !important;
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0.2) !important;
+    }
+}
+
+// --- Hero Typography Enhancement ---
+#hero h1 {
+    // Removed text-shadow as requested to avoid neo-brutalist look
+    font-weight: 800; // Ensuring bold weight stays
+}
+
+// --- Handwritten Accents (Existing targets) ---
+.handwritten {
+    font-family: 'Caveat', 'Comic Sans MS', cursive;
+    font-size: 1.4em;
+    font-weight: 600;
+    color: var(--color-warm);
+    transform: rotate(-2deg);
+    display: inline-block;
+}
+
+// --- Feature Cards Specifics ---
+#features h3 {
+    color: var(--color-primary-dark);
+}
+
+// --- Section Header Underline (CSS Only) ---
+section h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: var(--color-accent);
+    margin-top: 8px;
+    border-radius: 2px;
+}

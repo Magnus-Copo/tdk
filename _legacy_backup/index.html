@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Little Sprouts Preschool - A warm, nurturing environment where children ages 2-5 learn, play, and grow. Book a trial playdate today!">
+  <title>Little Sprouts Preschool | Where Learning Blooms</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --color-primary: #3A8DFF;
+      --color-primary-dark: #2563EB;
+      --color-accent: #FFC857;
+      --color-warm: #FF7A90;
+      --color-calm: #7BD389;
+      --color-neutral-900: #263238;
+      --color-neutral-700: #455A64;
+      --color-neutral-500: #90A4AE;
+      --color-bg: #FAFBFF;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--color-bg);
+      color: var(--color-neutral-700);
+      line-height: 1.6;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      color: var(--color-neutral-900);
+    }
+    
+    .gradient-text {
+      background: linear-gradient(90deg, var(--color-primary), var(--color-warm));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.5;
+      animation: blob-morph 15s ease-in-out infinite;
+    }
+    
+    @keyframes blob-morph {
+      0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+      25% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+      50% { border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%; }
+      75% { border-radius: 60% 40% 60% 30% / 70% 30% 50% 60%; }
+    }
+    
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(58, 141, 255, 0.15);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+      color: white;
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-family: 'Nunito', sans-serif;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(58, 141, 255, 0.4);
+    }
+    
+    .btn-secondary {
+      background: white;
+      color: var(--color-primary);
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-family: 'Nunito', sans-serif;
+      border: 2px solid var(--color-primary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    
+    .btn-secondary:hover {
+      background: var(--color-primary);
+      color: white;
+    }
+    
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+    
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header style="position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(250, 251, 255, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05);">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
+      <a href="/" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+        <svg width="44" height="44" viewBox="0 0 48 48" fill="none">
+          <circle cx="24" cy="24" r="22" fill="#3A8DFF"/>
+          <path d="M24 10C24 10 16 18 16 26C16 32 20 36 24 36C28 36 32 32 32 26C32 18 24 10 24 10Z" fill="#7BD389"/>
+          <circle cx="24" cy="24" r="6" fill="#FFC857"/>
+          <path d="M24 18C24 18 20 22 20 26C20 29 22 31 24 31C26 31 28 29 28 26C28 22 24 18Z" fill="#FF7A90"/>
+        </svg>
+        <span style="font-family: 'Nunito', sans-serif; font-size: 1.25rem; font-weight: 700; color: #263238;">Little <span style="color: #3A8DFF;">Sprouts</span></span>
+      </a>
+      
+      <nav style="display: flex; gap: 32px;" class="desktop-nav">
+        <a href="/" style="text-decoration: none; color: #3A8DFF; font-weight: 600; font-family: 'Nunito', sans-serif;">Home</a>
+        <a href="#programs" style="text-decoration: none; color: #455A64; font-weight: 600; font-family: 'Nunito', sans-serif;">Programs</a>
+        <a href="#admissions" style="text-decoration: none; color: #455A64; font-weight: 600; font-family: 'Nunito', sans-serif;">Admissions</a>
+        <a href="#teachers" style="text-decoration: none; color: #455A64; font-weight: 600; font-family: 'Nunito', sans-serif;">Teachers</a>
+      </nav>
+      
+      <button class="btn-primary" onclick="showBookingModal()">Book a Tour</button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section style="position: relative; min-height: 100vh; display: flex; align-items: center; padding-top: 100px; overflow: hidden;">
+    <!-- Background Blobs -->
+    <div class="blob" style="width: 600px; height: 600px; background: linear-gradient(135deg, #93C5FD, #3A8DFF); top: -200px; right: -200px;"></div>
+    <div class="blob" style="width: 400px; height: 400px; background: linear-gradient(135deg, #FFC857, #FF7A90); bottom: 100px; left: -150px; animation-delay: -5s;"></div>
+    <div class="blob" style="width: 300px; height: 300px; background: linear-gradient(135deg, #7BD389, #22C55E); bottom: -100px; right: 20%; animation-delay: -10s;"></div>
+    
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; position: relative; z-index: 1;">
+      <div class="reveal active">
+        <div style="display: inline-flex; align-items: center; gap: 8px; background: white; padding: 8px 16px; border-radius: 9999px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 24px;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="#7BD389"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          <span style="font-size: 0.875rem; color: #455A64;">Licensed & Accredited Since 2010</span>
+        </div>
+        
+        <h1 style="font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 24px;">
+          Where Little Minds <span class="gradient-text">Bloom & Grow</span>
+        </h1>
+        
+        <p style="font-size: 1.125rem; color: #455A64; margin-bottom: 32px; max-width: 500px;">
+          A warm, nurturing preschool environment where children ages 2-5 discover the joy of learning through play, exploration, and creativity.
+        </p>
+        
+        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+          <button class="btn-primary" onclick="showBookingModal()">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
+            Book Trial Playdate
+          </button>
+          <a href="#programs" class="btn-secondary">Virtual Tour</a>
+        </div>
+        
+        <div style="display: flex; gap: 48px; margin-top: 48px;">
+          <div>
+            <div style="font-family: 'Nunito', sans-serif; font-size: 2rem; font-weight: 800; color: #263238;">500+</div>
+            <div style="font-size: 0.875rem; color: #90A4AE;">Happy Families</div>
+          </div>
+          <div>
+            <div style="font-family: 'Nunito', sans-serif; font-size: 2rem; font-weight: 800; color: #263238;">15</div>
+            <div style="font-size: 0.875rem; color: #90A4AE;">Years Experience</div>
+          </div>
+          <div>
+            <div style="font-family: 'Nunito', sans-serif; font-size: 2rem; font-weight: 800; color: #263238;">12</div>
+            <div style="font-size: 0.875rem; color: #90A4AE;">Expert Teachers</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="reveal active" style="position: relative;">
+        <img src="/src/assets/images/hero-illustration.jpg" alt="Children playing and learning at preschool" style="width: 100%; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);">
+      </div>
+    </div>
+  </section>
+
+  <!-- Programs Section -->
+  <section id="programs" style="padding: 100px 24px;">
+    <div style="max-width: 1280px; margin: 0 auto;">
+      <div style="text-align: center; margin-bottom: 64px;" class="reveal">
+        <span style="font-size: 0.875rem; font-weight: 600; color: #3A8DFF; text-transform: uppercase; letter-spacing: 0.05em;">Our Programs</span>
+        <h2 style="font-size: clamp(2rem, 4vw, 3rem); margin-top: 12px;">Programs for Every Age</h2>
+        <p style="color: #455A64; max-width: 600px; margin: 16px auto 0;">Age-appropriate curricula designed to nurture your child's unique development at every stage.</p>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 32px;">
+        <!-- Toddler Program -->
+        <div class="card-hover reveal" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+          <div style="position: relative;">
+            <img src="/src/assets/images/program-toddler.jpg" alt="Toddler program" style="width: 100%; height: 220px; object-fit: cover;">
+            <span style="position: absolute; top: 16px; left: 16px; background: #FFC857; color: #263238; padding: 6px 14px; border-radius: 9999px; font-size: 0.75rem; font-weight: 700;">Ages 2-3</span>
+          </div>
+          <div style="padding: 24px;">
+            <h3 style="font-size: 1.5rem; margin-bottom: 8px;">Toddler Program</h3>
+            <p style="color: #455A64; margin-bottom: 16px;">Sensory exploration, language development, and social skills in a nurturing environment.</p>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="#3A8DFF"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+              <span style="font-size: 0.875rem; color: #455A64;">Half & Full Day Options</span>
+            </div>
+            <div style="background: #F0F4FF; border-radius: 8px; padding: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 8px;">
+                <span>Enrollment</span>
+                <span style="color: #3A8DFF; font-weight: 600;">85% Full</span>
+              </div>
+              <div style="background: #E0E7FF; border-radius: 9999px; height: 8px; overflow: hidden;">
+                <div style="background: linear-gradient(90deg, #3A8DFF, #7BD389); width: 85%; height: 100%; border-radius: 9999px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Preschool Program -->
+        <div class="card-hover reveal" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+          <div style="position: relative;">
+            <img src="/src/assets/images/program-preschool.jpg" alt="Preschool program" style="width: 100%; height: 220px; object-fit: cover;">
+            <span style="position: absolute; top: 16px; left: 16px; background: #3A8DFF; color: white; padding: 6px 14px; border-radius: 9999px; font-size: 0.75rem; font-weight: 700;">Ages 3-4</span>
+          </div>
+          <div style="padding: 24px;">
+            <h3 style="font-size: 1.5rem; margin-bottom: 8px;">Preschool Program</h3>
+            <p style="color: #455A64; margin-bottom: 16px;">Structured learning through play, early literacy, and creative expression activities.</p>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="#3A8DFF"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+              <span style="font-size: 0.875rem; color: #455A64;">Half & Full Day Options</span>
+            </div>
+            <div style="background: #F0F4FF; border-radius: 8px; padding: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 8px;">
+                <span>Enrollment</span>
+                <span style="color: #3A8DFF; font-weight: 600;">92% Full</span>
+              </div>
+              <div style="background: #E0E7FF; border-radius: 9999px; height: 8px; overflow: hidden;">
+                <div style="background: linear-gradient(90deg, #3A8DFF, #7BD389); width: 92%; height: 100%; border-radius: 9999px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Pre-K Program -->
+        <div class="card-hover reveal" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+          <div style="position: relative;">
+            <img src="/src/assets/images/program-prek.jpg" alt="Pre-K program" style="width: 100%; height: 220px; object-fit: cover;">
+            <span style="position: absolute; top: 16px; left: 16px; background: #7BD389; color: white; padding: 6px 14px; border-radius: 9999px; font-size: 0.75rem; font-weight: 700;">Ages 4-5</span>
+          </div>
+          <div style="padding: 24px;">
+            <h3 style="font-size: 1.5rem; margin-bottom: 8px;">Pre-Kindergarten</h3>
+            <p style="color: #455A64; margin-bottom: 16px;">Kindergarten readiness with focus on academics, independence, and social skills.</p>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="#3A8DFF"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+              <span style="font-size: 0.875rem; color: #455A64;">Full Day Only</span>
+            </div>
+            <div style="background: #F0F4FF; border-radius: 8px; padding: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 8px;">
+                <span>Enrollment</span>
+                <span style="color: #3A8DFF; font-weight: 600;">78% Full</span>
+              </div>
+              <div style="background: #E0E7FF; border-radius: 9999px; height: 8px; overflow: hidden;">
+                <div style="background: linear-gradient(90deg, #3A8DFF, #7BD389); width: 78%; height: 100%; border-radius: 9999px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section style="padding: 100px 24px; background: white;">
+    <div style="max-width: 1280px; margin: 0 auto;">
+      <div style="text-align: center; margin-bottom: 64px;" class="reveal">
+        <span style="font-size: 0.875rem; font-weight: 600; color: #3A8DFF; text-transform: uppercase; letter-spacing: 0.05em;">Why Choose Us</span>
+        <h2 style="font-size: clamp(2rem, 4vw, 3rem); margin-top: 12px;">Nurturing Every Child's Potential</h2>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px;">
+        <div class="card-hover reveal" style="background: linear-gradient(135deg, #F0F4FF, #E8F5E9); padding: 32px; border-radius: 20px; text-align: center;">
+          <div style="width: 64px; height: 64px; background: linear-gradient(135deg, #3A8DFF, #2563EB); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <h3 style="font-size: 1.25rem; margin-bottom: 12px;">Play-Based Learning</h3>
+          <p style="color: #455A64;">Our curriculum combines structured activities with free play, allowing children to learn naturally while having fun.</p>
+        </div>
+        
+        <div class="card-hover reveal" style="background: linear-gradient(135deg, #FFF8E1, #FFEBEE); padding: 32px; border-radius: 20px; text-align: center;">
+          <div style="width: 64px; height: 64px; background: linear-gradient(135deg, #FF7A90, #F06292); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          </div>
+          <h3 style="font-size: 1.25rem; margin-bottom: 12px;">Loving Environment</h3>
+          <p style="color: #455A64;">Every child is welcomed, valued, and supported by our caring staff who foster emotional security.</p>
+        </div>
+        
+        <div class="card-hover reveal" style="background: linear-gradient(135deg, #E8F5E9, #E0F7FA); padding: 32px; border-radius: 20px; text-align: center;">
+          <div style="width: 64px; height: 64px; background: linear-gradient(135deg, #7BD389, #22C55E); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422A12.083 12.083 0 0112 21.5a12.083 12.083 0 01-6.16-10.922L12 14z"/></svg>
+          </div>
+          <h3 style="font-size: 1.25rem; margin-bottom: 12px;">School Readiness</h3>
+          <p style="color: #455A64;">We build foundational skills in literacy, math, and social-emotional development for kindergarten success.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teachers Section -->
+  <section id="teachers" style="padding: 100px 24px;">
+    <div style="max-width: 1280px; margin: 0 auto;">
+      <div style="text-align: center; margin-bottom: 64px;" class="reveal">
+        <span style="font-size: 0.875rem; font-weight: 600; color: #3A8DFF; text-transform: uppercase; letter-spacing: 0.05em;">Our Team</span>
+        <h2 style="font-size: clamp(2rem, 4vw, 3rem); margin-top: 12px;">Meet Our Caring Educators</h2>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px;">
+        <div class="reveal" style="text-align: center;">
+          <div style="position: relative; width: 180px; height: 180px; margin: 0 auto 24px;">
+            <div style="position: absolute; inset: -8px; border: 3px dashed #93C5FD; border-radius: 50%; animation: spin 20s linear infinite;"></div>
+            <img src="/src/assets/images/teacher-1.jpg" alt="Maria Rodriguez" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 4px solid white; box-shadow: 0 8px 24px rgba(0,0,0,0.12);">
+          </div>
+          <h3 style="font-size: 1.25rem; margin-bottom: 4px;">Maria Rodriguez</h3>
+          <p style="color: #3A8DFF; font-weight: 600; margin-bottom: 8px;">Toddler Program Lead</p>
+          <p style="color: #90A4AE; font-size: 0.875rem;">M.A. Early Ed • CDA Certified</p>
+        </div>
+        
+        <div class="reveal" style="text-align: center;">
+          <div style="position: relative; width: 180px; height: 180px; margin: 0 auto 24px;">
+            <div style="position: absolute; inset: -8px; border: 3px dashed #FFC857; border-radius: 50%; animation: spin 20s linear infinite;"></div>
+            <img src="/src/assets/images/teacher-2.jpg" alt="David Kim" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 4px solid white; box-shadow: 0 8px 24px rgba(0,0,0,0.12);">
+          </div>
+          <h3 style="font-size: 1.25rem; margin-bottom: 4px;">David Kim</h3>
+          <p style="color: #3A8DFF; font-weight: 600; margin-bottom: 8px;">Preschool Program Lead</p>
+          <p style="color: #90A4AE; font-size: 0.875rem;">B.A. Early Ed • STEM Certified</p>
+        </div>
+        
+        <div class="reveal" style="text-align: center;">
+          <div style="position: relative; width: 180px; height: 180px; margin: 0 auto 24px;">
+            <div style="position: absolute; inset: -8px; border: 3px dashed #7BD389; border-radius: 50%; animation: spin 20s linear infinite;"></div>
+            <img src="/src/assets/images/teacher-3.jpg" alt="Jennifer Walsh" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 4px solid white; box-shadow: 0 8px 24px rgba(0,0,0,0.12);">
+          </div>
+          <h3 style="font-size: 1.25rem; margin-bottom: 4px;">Jennifer Walsh</h3>
+          <p style="color: #3A8DFF; font-weight: 600; margin-bottom: 8px;">Pre-K Program Lead</p>
+          <p style="color: #90A4AE; font-size: 0.875rem;">M.Ed. • Reading Specialist</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section style="padding: 100px 24px; background: linear-gradient(135deg, #F0F4FF, #E8F5E9);">
+    <div style="max-width: 700px; margin: 0 auto; text-align: center;" class="reveal">
+      <h2 style="font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 16px;">Ready to See Us in Action?</h2>
+      <p style="color: #455A64; margin-bottom: 32px; font-size: 1.125rem;">Schedule a tour and experience the Little Sprouts difference. We'd love to show you around!</p>
+      <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+        <button class="btn-primary" onclick="showBookingModal()">Book a Tour</button>
+        <a href="tel:5551234567" class="btn-secondary">Call Us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="background: #263238; color: #B0BEC5; padding: 64px 24px 32px;">
+    <div style="max-width: 1280px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 48px;">
+        <div>
+          <a href="/" style="display: flex; align-items: center; gap: 12px; text-decoration: none; margin-bottom: 16px;">
+            <svg width="40" height="40" viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="24" r="22" fill="#3A8DFF"/>
+              <path d="M24 10C24 10 16 18 16 26C16 32 20 36 24 36C28 36 32 32 32 26C32 18 24 10 24 10Z" fill="#7BD389"/>
+              <circle cx="24" cy="24" r="6" fill="#FFC857"/>
+            </svg>
+            <span style="font-family: 'Nunito', sans-serif; font-size: 1.25rem; font-weight: 700; color: white;">Little <span style="color: #3A8DFF;">Sprouts</span></span>
+          </a>
+          <p style="font-size: 0.875rem; line-height: 1.6;">Nurturing young minds and helping children bloom into confident learners since 2010.</p>
+        </div>
+        
+        <div>
+          <h4 style="color: white; font-size: 1rem; margin-bottom: 16px;">Quick Links</h4>
+          <ul style="list-style: none; font-size: 0.875rem;">
+            <li style="margin-bottom: 8px;"><a href="#programs" style="color: #B0BEC5; text-decoration: none;">Programs</a></li>
+            <li style="margin-bottom: 8px;"><a href="#admissions" style="color: #B0BEC5; text-decoration: none;">Admissions</a></li>
+            <li style="margin-bottom: 8px;"><a href="#teachers" style="color: #B0BEC5; text-decoration: none;">Our Teachers</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 style="color: white; font-size: 1rem; margin-bottom: 16px;">Contact</h4>
+          <ul style="list-style: none; font-size: 0.875rem;">
+            <li style="margin-bottom: 8px;">123 Sunshine Lane</li>
+            <li style="margin-bottom: 8px;">Happy Valley, CA 90210</li>
+            <li style="margin-bottom: 8px;">(555) 123-4567</li>
+            <li>hello@littlesprouts.com</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div style="border-top: 1px solid #37474F; padding-top: 24px; text-align: center; font-size: 0.875rem;">
+        <p>&copy; 2024 Little Sprouts Preschool. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Booking Modal -->
+  <div id="bookingModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 24px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; position: relative;">
+      <button onclick="hideBookingModal()" style="position: absolute; top: 16px; right: 16px; background: none; border: none; cursor: pointer; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #F5F7FA;">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="#455A64"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      </button>
+      
+      <div style="padding: 40px;">
+        <h2 style="margin-bottom: 8px;">Book a Trial Playdate</h2>
+        <p style="color: #455A64; margin-bottom: 24px;">Fill out the form below and we'll contact you to confirm your visit.</p>
+        
+        <form id="bookingForm" onsubmit="handleBookingSubmit(event)">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+            <div>
+              <label style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 6px; color: #263238;">Parent Name *</label>
+              <input type="text" required style="width: 100%; padding: 12px 16px; border: 2px solid #E0E7FF; border-radius: 10px; font-size: 1rem; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#3A8DFF'" onblur="this.style.borderColor='#E0E7FF'">
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 6px; color: #263238;">Child Name *</label>
+              <input type="text" required style="width: 100%; padding: 12px 16px; border: 2px solid #E0E7FF; border-radius: 10px; font-size: 1rem; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#3A8DFF'" onblur="this.style.borderColor='#E0E7FF'">
+            </div>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+            <div>
+              <label style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 6px; color: #263238;">Email *</label>
+              <input type="email" required style="width: 100%; padding: 12px 16px; border: 2px solid #E0E7FF; border-radius: 10px; font-size: 1rem; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#3A8DFF'" onblur="this.style.borderColor='#E0E7FF'">
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 6px; color: #263238;">Phone *</label>
+              <input type="tel" required style="width: 100%; padding: 12px 16px; border: 2px solid #E0E7FF; border-radius: 10px; font-size: 1rem; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#3A8DFF'" onblur="this.style.borderColor='#E0E7FF'">
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 24px;">
+            <label style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 6px; color: #263238;">Preferred Date *</label>
+            <input type="date" required style="width: 100%; padding: 12px 16px; border: 2px solid #E0E7FF; border-radius: 10px; font-size: 1rem; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#3A8DFF'" onblur="this.style.borderColor='#E0E7FF'">
+          </div>
+          
+          <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">Book Trial Playdate</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div id="successModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1001; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 24px; max-width: 400px; width: 90%; padding: 40px; text-align: center;">
+      <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #7BD389, #22C55E); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
+        <svg width="40" height="40" viewBox="0 0 20 20" fill="white"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+      </div>
+      <h2 style="margin-bottom: 8px;">Booking Request Sent!</h2>
+      <p style="color: #455A64; margin-bottom: 24px;">Thank you for your interest! We'll contact you within 24 hours to confirm your trial playdate.</p>
+      <button class="btn-primary" onclick="hideSuccessModal()" style="width: 100%;">Close</button>
+    </div>
+  </div>
+
+  <script>
+    // Scroll reveal animation
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, observerOptions);
+    
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    
+    // Modal functions
+    function showBookingModal() {
+      document.getElementById('bookingModal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function hideBookingModal() {
+      document.getElementById('bookingModal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    
+    function hideSuccessModal() {
+      document.getElementById('successModal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    
+    function handleBookingSubmit(e) {
+      e.preventDefault();
+      hideBookingModal();
+      document.getElementById('successModal').style.display = 'flex';
+      e.target.reset();
+    }
+    
+    // Close modal on outside click
+    document.getElementById('bookingModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) hideBookingModal();
+    });
+    
+    document.getElementById('successModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) hideSuccessModal();
+    });
+    
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        hideBookingModal();
+        hideSuccessModal();
+      }
+    });
+  </script>
+</body>
+</html>

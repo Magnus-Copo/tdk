@@ -1,0 +1,283 @@
+﻿[36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+transforming...
+node.exe : DEPRECATION 
+WARNING [global-builtin]: 
+Global built-in functions 
+are deprecated and will be 
+removed in Dart Sass 3.0.0.
+At C:\Users\Hassa\AppData\R
+oaming\npm\npx.ps1:24 
+char:5
++     & "node$exe"  "$based
+ir/node_modules/npm/bin/npx
+-cli.js" $args
++     ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
+    + CategoryInfo         
+     : NotSpecified: (DEP  
+  RECATION WAR...art Sas   
+ s 3.0.0.:String) [], R    
+emoteException
+    + FullyQualifiedErrorI 
+   d : NativeCommandError
+ 
+Use list.nth instead.
+
+More info and automated 
+migrator: https://sass-lang
+.com/d/import
+
+   Γò╖
+40 Γöé     $amp: nth($cfg, 
+1);
+   Γöé           
+^^^^^^^^^^^^
+   Γò╡
+    src\styles\PUCHero.modu
+le.scss 40:11  root 
+stylesheet
+
+DEPRECATION WARNING 
+[global-builtin]: Global 
+built-in functions are 
+deprecated and will be 
+removed in Dart Sass 3.0.0.
+Use list.nth instead.
+
+More info and automated 
+migrator: https://sass-lang
+.com/d/import
+
+    Γò╖
+205 Γöé     $dur: 
+nth($cfg, 2);
+    Γöé           
+^^^^^^^^^^^^
+    Γò╡
+    src\styles\PUCHero.modu
+le.scss 205:11  root 
+stylesheet
+
+DEPRECATION WARNING 
+[global-builtin]: Global 
+built-in functions are 
+deprecated and will be 
+removed in Dart Sass 3.0.0.
+Use list.nth instead.
+
+More info and automated 
+migrator: https://sass-lang
+.com/d/import
+
+    Γò╖
+206 Γöé     $delay: 
+nth($cfg, 3);
+    Γöé             
+^^^^^^^^^^^^
+    Γò╡
+    src\styles\PUCHero.modu
+le.scss 206:13  root 
+stylesheet
+
+DEPRECATION WARNING 
+[global-builtin]: Global 
+built-in functions are 
+deprecated and will be 
+removed in Dart Sass 3.0.0.
+Use map.get instead.
+
+More info and automated 
+migrator: https://sass-lang
+.com/d/import
+
+    Γò╖
+207 Γöé     $accent: 
+map-get($stream-accents, 
+$i);
+    Γöé              ^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^
+    Γò╡
+    src\styles\PUCHero.modu
+le.scss 207:14  root 
+stylesheet
+
+DEPRECATION WARNING 
+[global-builtin]: Global 
+built-in functions are 
+deprecated and will be 
+removed in Dart Sass 3.0.0.
+Use map.get instead.
+
+More info and automated 
+migrator: https://sass-lang
+.com/d/import
+
+    Γò╖
+208 Γöé     $enter-delay: 
+map-get($entrance-delays, 
+$i);
+    Γöé                   ^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^
+    Γò╡
+    src\styles\PUCHero.modu
+le.scss 208:19  root 
+stylesheet
+
+WARNING: 6 repetitive 
+deprecation warnings 
+omitted.
+Run in verbose mode to see 
+all warnings.
+
+DEPRECATION WARNING 
+[global-builtin]: Global 
+built-in functions are 
+deprecated and will be 
+removed in Dart Sass 3.0.0.
+Use list.nth instead.
+
+More info and automated 
+migrator: https://sass-lang
+.com/d/import
+
+   Γò╖
+44 Γöé     $amp: nth($cfg, 
+1);
+   Γöé           
+^^^^^^^^^^^^
+   Γò╡
+    src\styles\PrimarySchoo
+lHero.module.scss 44:11  
+root stylesheet
+
+DEPRECATION WARNING 
+[global-builtin]: Global 
+built-in functions are 
+deprecated and will be 
+removed in Dart Sass 3.0.0.
+Use list.nth instead.
+
+More info and automated 
+migrator: https://sass-lang
+.com/d/import
+
+    Γò╖
+260 Γöé     $dur: 
+nth($cfg, 2);
+    Γöé           
+^^^^^^^^^^^^
+    Γò╡
+    src\styles\PrimarySchoo
+lHero.module.scss 260:11  
+root stylesheet
+
+DEPRECATION WARNING 
+[global-builtin]: Global 
+built-in functions are 
+deprecated and will be 
+removed in Dart Sass 3.0.0.
+Use list.nth instead.
+
+More info and automated 
+migrator: https://sass-lang
+.com/d/import
+
+    Γò╖
+261 Γöé     $delay: 
+nth($cfg, 3);
+    Γöé             
+^^^^^^^^^^^^
+    Γò╡
+    src\styles\PrimarySchoo
+lHero.module.scss 261:13  
+root stylesheet
+
+DEPRECATION WARNING 
+[global-builtin]: Global 
+built-in functions are 
+deprecated and will be 
+removed in Dart Sass 3.0.0.
+Use map.get instead.
+
+More info and automated 
+migrator: https://sass-lang
+.com/d/import
+
+    Γò╖
+262 Γöé     $accent: 
+map-get($card-accents, $i);
+    Γöé              
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+    Γò╡
+    src\styles\PrimarySchoo
+lHero.module.scss 262:14  
+root stylesheet
+
+DEPRECATION WARNING 
+[global-builtin]: Global 
+built-in functions are 
+deprecated and will be 
+removed in Dart Sass 3.0.0.
+Use map.get instead.
+
+More info and automated 
+migrator: https://sass-lang
+.com/d/import
+
+    Γò╖
+263 Γöé     $enter-delay: 
+map-get($entrance-delays, 
+$i);
+    Γöé                   ^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^
+    Γò╡
+    src\styles\PrimarySchoo
+lHero.module.scss 263:19  
+root stylesheet
+
+WARNING: 10 repetitive 
+deprecation warnings 
+omitted.
+Run in verbose mode to see 
+all warnings.
+
+[32mΓ£ô[39m 2736 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mindex.html                                                        [39m[1m[2m    0.99 kB[22m[1m[22m[2m Γöé gzip:   0.54 kB[22m
+[2mdist/[22m[32massets/WhatsApp Image 2025-07-12 at 6.06.14 PM (1)-CtVqtAB7.jpeg  [39m[1m[2m  662.98 kB[22m[1m[22m
+[2mdist/[22m[32massets/WhatsApp Image 2025-07-12 at 6.06.12 PM-BqxCIWXi.jpeg      [39m[1m[2m  675.73 kB[22m[1m[22m
+[2mdist/[22m[32massets/WhatsApp Image 2025-07-12 at 6.06.01 PM-ve6TcvIW.jpeg      [39m[1m[2m  718.59 kB[22m[1m[22m
+[2mdist/[22m[32massets/WhatsApp Image 2025-07-12 at 6.06.00 PM-CdbEvwbA.jpeg      [39m[1m[2m  738.86 kB[22m[1m[22m
+[2mdist/[22m[32massets/WhatsApp Image 2025-07-12 at 6.06.00 PM (1)-DP3yWhul.jpeg  [39m[1m[2m  797.92 kB[22m[1m[22m
+[2mdist/[22m[32massets/WhatsApp Image 2025-07-12 at 6.06.15 PM-4CGDgxf3.jpeg      [39m[1m[2m  802.73 kB[22m[1m[22m
+[2mdist/[22m[32massets/WhatsApp Image 2025-07-12 at 6.06.02 PM-CZJwKWr2.jpeg      [39m[1m[2m  813.06 kB[22m[1m[22m
+[2mdist/[22m[32massets/WhatsApp Image 2025-07-12 at 6.01.50 PM-BiVnIbPu.jpeg      [39m[1m[2m  816.56 kB[22m[1m[22m
+[2mdist/[22m[32massets/WhatsApp Image 2025-07-12 at 6.06.14 PM (2)-De0e3fMz.jpeg  [39m[1m[2m  873.48 kB[22m[1m[22m
+[2mdist/[22m[32massets/WhatsApp Image 2025-07-12 at 6.06.13 PM-C96A3Nit.jpeg      [39m[1m[2m  880.81 kB[22m[1m[22m
+[2mdist/[22m[32massets/WhatsApp Image 2025-07-12 at 6.06.13 PM (2)-DgBsSW9k.jpeg  [39m[1m[2m  904.89 kB[22m[1m[22m
+[2mdist/[22m[32massets/WhatsApp Image 2025-07-12 at 6.06.14 PM-PPCI5RZt.jpeg      [39m[1m[2m  930.55 kB[22m[1m[22m
+[2mdist/[22m[32massets/WhatsApp Image 2025-07-12 at 6.06.11 PM-XPRBwW3a.jpeg      [39m[1m[2m  975.57 kB[22m[1m[22m
+[2mdist/[22m[32massets/WhatsApp Image 2025-07-12 at 6.06.10 PM (1)-BBu0wUVO.jpeg  [39m[1m[2m1,164.62 kB[22m[1m[22m
+[2mdist/[22m[32massets/WhatsApp Image 2025-07-12 at 6.06.10 PM-4iXj6QE0.jpeg      [39m[1m[2m1,281.17 kB[22m[1m[22m
+[2mdist/[22m[35massets/main-CgC1docS.css                                          [39m[1m[2m   63.48 kB[22m[1m[22m[2m Γöé gzip:  12.49 kB[22m
+[2mdist/[22m[36massets/main-C-R-3NB7.js                                           [39m[1m[33m  820.48 kB[39m[22m[2m Γöé gzip: 249.93 kB[22m
+[33m
+(!) Some chunks are larger 
+than 500 kB after 
+minification. Consider:
+- Using dynamic import() 
+to code-split the 
+application
+- Use build.rollupOptions.o
+utput.manualChunks to 
+improve chunking: https://r
+ollupjs.org/configuration-o
+ptions/#output-manualchunks
+- Adjust chunk size limit 
+for this warning via build.
+chunkSizeWarningLimit.[39m
+[32mΓ£ô built in 7.65s[39m

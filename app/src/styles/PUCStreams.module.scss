@@ -1,0 +1,121 @@
+.streamsSection {
+    position: relative;
+    padding: clamp(70px, 10vw, 120px) clamp(20px, 5vw, 80px) clamp(36px, 6vw, 72px);
+    background: linear-gradient(180deg, #FFFFFF 0%, #F9FAFB 40%, #F3F4F6 60%, #FFFFFF 100%);
+    overflow: hidden;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.04) 0%, transparent 50%),
+            radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.04) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    /* Subtle Architectural Pattern */
+    .patternOverlay {
+        position: absolute;
+        inset: 0;
+        opacity: 0.4;
+        background-image: radial-gradient(#6366f1 0.5px, transparent 0.5px);
+        background-size: 24px 24px;
+        mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+        pointer-events: none;
+    }
+}
+
+.streamsContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.streamsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 28px;
+}
+
+.streamCard {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border-radius: 24px;
+    padding: 36px 28px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
+        0 2px 4px -1px rgba(0, 0, 0, 0.03);
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(255, 255, 255, 0.4) 0%,
+                transparent 60%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+
+    &:hover {
+        transform: translateY(-8px);
+        background: rgba(255, 255, 255, 0.95);
+        border-color: rgba(99, 102, 241, 0.2);
+        box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.1);
+
+        &::after {
+            opacity: 1;
+        }
+    }
+}
+
+.accentBar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    border-radius: 24px 24px 0 0;
+}
+
+/* Year Filter Pills */
+.filterContainer {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.filterButton {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 10px 24px;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1.5px solid rgba(148, 163, 184, 0.2);
+    background: white;
+    color: #64748b;
+
+    &.active {
+        background: #6366f1;
+        color: white;
+        border-color: #6366f1;
+        box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+    }
+
+    &:hover:not(.active) {
+        border-color: #6366f1;
+        color: #6366f1;
+        background: rgba(99, 102, 241, 0.05);
+    }
+}

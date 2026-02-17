@@ -17,6 +17,7 @@ const PUCFloatingInput = ({
     return (
         <div style={{ position: 'relative', marginBottom: '20px' }}>
             <input
+                className="puc-float-input"
                 id={`puc-${name}`}
                 type={type}
                 name={name}
@@ -29,10 +30,11 @@ const PUCFloatingInput = ({
                 autoComplete={name === 'phoneNumber' ? 'tel' : name === 'parentName' || name === 'studentName' ? 'name' : undefined}
                 style={{
                     width: '100%',
-                    padding: '24px 16px 8px',
+                    padding: '30px 16px 12px',
                     fontFamily: "'Nunito', 'Inter', sans-serif",
-                    fontSize: '0.95rem',
+                    fontSize: '1rem',
                     fontWeight: 600,
+                    lineHeight: 1.4,
                     color: '#1E293B',
                     background: isFocused ? 'rgba(255,255,255,0.95)' : 'rgba(248,250,252,0.8)',
                     border: `1.5px solid ${hasError ? '#EF4444' : isFocused ? '#6366F1' : 'rgba(148,163,184,0.25)'}`,
@@ -43,12 +45,13 @@ const PUCFloatingInput = ({
                 }}
             />
             <label
+                className="puc-float-label"
                 htmlFor={`puc-${name}`}
                 style={{
                     position: 'absolute',
                     left: '16px',
                     top: '6px',
-                    fontSize: '0.78rem',
+                    fontSize: '0.7rem',
                     fontFamily: "'Nunito', sans-serif",
                     fontWeight: 600,
                     color: hasError ? '#EF4444' : isFocused ? '#6366F1' : '#78869B',
@@ -197,6 +200,15 @@ const PUCContactSection = () => {
         <>
             <style>{`
                 @media (max-width: 768px) {
+                    .puc-float-label {
+                        top: -9px !important;
+                        font-size: 0.62rem !important;
+                    }
+                    .puc-float-input {
+                        padding-top: 20px !important;
+                        padding-bottom: 12px !important;
+                        font-size: 1rem !important;
+                    }
                     .puc-visit-card {
                         padding-left: 12px !important;
                     }
@@ -204,13 +216,13 @@ const PUCContactSection = () => {
                         margin-left: -12px;
                     }
                     .puc-select-field {
-                        padding-top: 30px !important;
-                        padding-bottom: 10px !important;
-                        font-size: 0.92rem !important;
+                        padding-top: 34px !important;
+                        padding-bottom: 12px !important;
+                        font-size: 1rem !important;
                     }
                     .puc-select-label {
-                        top: 4px !important;
-                        font-size: 0.7rem !important;
+                        top: 5px !important;
+                        font-size: 0.64rem !important;
                     }
                 }
             `}</style>
@@ -509,17 +521,18 @@ const PUCContactSection = () => {
                                         <select
                                             id="puc-stream"
                                             name="stream"
-                                            className="puc-select-field"
+                                            className="puc-select-field puc-float-input"
                                             value={formData.stream}
                                             onChange={(e) => handleChange('stream', e.target.value)}
                                             onFocus={() => setFocusedField('stream')}
                                             onBlur={() => setFocusedField(null)}
                                             style={{
                                                 width: '100%',
-                                                padding: '24px 40px 8px 16px',
+                                                padding: '30px 40px 12px 16px',
                                                 fontFamily: "'Nunito', 'Inter', sans-serif",
-                                                fontSize: '0.95rem',
+                                                fontSize: '1rem',
                                                 fontWeight: 600,
+                                                lineHeight: 1.4,
                                                 color: formData.stream ? '#1E293B' : '#94A3B8',
                                                 background: focusedField === 'stream' ? 'rgba(255,255,255,0.95)' : 'rgba(248,250,252,0.8)',
                                                 border: `1.5px solid ${errors.stream ? '#EF4444' : focusedField === 'stream' ? '#6366F1' : 'rgba(148,163,184,0.25)'}`,
@@ -539,12 +552,12 @@ const PUCContactSection = () => {
                                         </select>
                                         <label
                                             htmlFor="puc-stream"
-                                            className="puc-select-label"
+                                            className="puc-select-label puc-float-label"
                                             style={{
                                                 position: 'absolute',
                                                 left: '16px',
                                                 top: '6px',
-                                                fontSize: '0.78rem',
+                                                fontSize: '0.7rem',
                                                 fontWeight: 600,
                                                 color: errors.stream ? '#EF4444' : focusedField === 'stream' ? '#6366F1' : '#78869B',
                                                 transition: 'all 0.2s cubic-bezier(0.4,0,0.2,1)',
@@ -583,17 +596,18 @@ const PUCContactSection = () => {
                                         <select
                                             id="puc-year"
                                             name="pucYear"
-                                            className="puc-select-field"
+                                            className="puc-select-field puc-float-input"
                                             value={formData.pucYear}
                                             onChange={(e) => handleChange('pucYear', e.target.value)}
                                             onFocus={() => setFocusedField('pucYear')}
                                             onBlur={() => setFocusedField(null)}
                                             style={{
                                                 width: '100%',
-                                                padding: '24px 40px 8px 16px',
+                                                padding: '30px 40px 12px 16px',
                                                 fontFamily: "'Nunito', 'Inter', sans-serif",
-                                                fontSize: '0.95rem',
+                                                fontSize: '1rem',
                                                 fontWeight: 600,
+                                                lineHeight: 1.4,
                                                 color: formData.pucYear ? '#1E293B' : '#94A3B8',
                                                 background: focusedField === 'pucYear' ? 'rgba(255,255,255,0.95)' : 'rgba(248,250,252,0.8)',
                                                 border: `1.5px solid ${errors.pucYear ? '#EF4444' : focusedField === 'pucYear' ? '#6366F1' : 'rgba(148,163,184,0.25)'}`,
@@ -611,12 +625,12 @@ const PUCContactSection = () => {
                                         </select>
                                         <label
                                             htmlFor="puc-year"
-                                            className="puc-select-label"
+                                            className="puc-select-label puc-float-label"
                                             style={{
                                                 position: 'absolute',
                                                 left: '16px',
                                                 top: '6px',
-                                                fontSize: '0.78rem',
+                                                fontSize: '0.7rem',
                                                 fontWeight: 600,
                                                 color: errors.pucYear ? '#EF4444' : focusedField === 'pucYear' ? '#6366F1' : '#78869B',
                                                 transition: 'all 0.2s cubic-bezier(0.4,0,0.2,1)',
@@ -652,6 +666,7 @@ const PUCContactSection = () => {
                                             {/* Message textarea */}
                                             <div style={{ position: 'relative', marginBottom: '24px' }}>
                                                 <textarea
+                                                    className="puc-float-input"
                                                     id="puc-message"
                                                     name="message"
                                                     value={formData.message}
@@ -661,10 +676,11 @@ const PUCContactSection = () => {
                                                     rows={3}
                                                     style={{
                                                         width: '100%',
-                                                        padding: '18px 16px 8px',
+                                                        padding: '30px 16px 12px',
                                                         fontFamily: "'Nunito', 'Inter', sans-serif",
-                                                        fontSize: '0.95rem',
+                                                        fontSize: '1rem',
                                                         fontWeight: 600,
+                                                        lineHeight: 1.4,
                                                         color: '#1E293B',
                                                         background: focusedField === 'message' ? 'rgba(255,255,255,0.95)' : 'rgba(248,250,252,0.8)',
                                                         border: `1.5px solid ${focusedField === 'message' ? '#6366F1' : 'rgba(148,163,184,0.25)'}`,
@@ -677,12 +693,13 @@ const PUCContactSection = () => {
                                                     }}
                                                 />
                                                 <label
+                                                    className="puc-float-label"
                                                     htmlFor="puc-message"
                                                     style={{
                                                         position: 'absolute',
                                                         left: '16px',
-                                                        top: focusedField === 'message' || formData.message ? '6px' : '14px',
-                                                        fontSize: focusedField === 'message' || formData.message ? '0.78rem' : '0.92rem',
+                                                        top: '6px',
+                                                        fontSize: '0.7rem',
                                                         fontWeight: 600,
                                                         color: focusedField === 'message' ? '#6366F1' : '#78869B',
                                                         transition: 'all 0.2s cubic-bezier(0.4,0,0.2,1)',

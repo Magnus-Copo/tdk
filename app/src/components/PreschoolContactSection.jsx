@@ -18,12 +18,13 @@ const PreschoolFormField = ({
     return (
         <div style={{ position: 'relative' }}>
             <label
+                className="preschool-float-label"
                 htmlFor={`contact-${name}`}
                 style={{
                     position: 'absolute',
                     left: '16px',
-                    top: '8px',
-                    fontSize: '0.7rem',
+                    top: '6px',
+                    fontSize: '0.68rem',
                     fontFamily: "'Nunito', sans-serif",
                     fontWeight: 600,
                     color: hasError ? '#EF4444' : isFocused ? '#3B82F6' : '#94A3B8',
@@ -39,6 +40,7 @@ const PreschoolFormField = ({
                 {label} {required && <span style={{ color: '#EF4444' }}>*</span>}
             </label>
             <input
+                className="preschool-float-input"
                 id={`contact-${name}`}
                 type={type}
                 name={name}
@@ -51,12 +53,13 @@ const PreschoolFormField = ({
                 autoComplete={name === 'phoneNumber' ? 'tel' : name === 'parentName' || name === 'childName' ? 'name' : undefined}
                 style={{
                     width: '100%',
-                    padding: '26px 16px 10px',
+                    padding: '30px 16px 12px',
                     borderRadius: '12px',
                     border: `1.5px solid ${hasError ? '#FCA5A5' : isFocused ? '#3B82F6' : '#E2E8F0'}`,
                     background: isFocused ? '#FFFFFF' : '#F8FAFC',
-                    fontSize: '0.95rem',
+                    fontSize: '1rem',
                     fontFamily: "'Nunito', 'Inter', sans-serif",
+                    lineHeight: 1.4,
                     color: '#1E293B',
                     letterSpacing: '0.005em',
                     outline: 'none',
@@ -240,6 +243,15 @@ const PreschoolContactSection = () => {
                     transform: translateY(-2px);
                 }
                 @media (max-width: 768px) {
+                    .preschool-float-label {
+                        top: -9px !important;
+                        font-size: 0.62rem !important;
+                    }
+                    .preschool-float-input {
+                        padding-top: 20px !important;
+                        padding-bottom: 12px !important;
+                        font-size: 1rem !important;
+                    }
                     .preschool-visit-card {
                         padding-left: 12px !important;
                     }
@@ -247,13 +259,13 @@ const PreschoolContactSection = () => {
                         margin-left: -12px;
                     }
                     .preschool-program-select {
-                        padding-top: 32px !important;
-                        padding-bottom: 10px !important;
-                        font-size: 0.92rem !important;
+                        padding-top: 34px !important;
+                        padding-bottom: 12px !important;
+                        font-size: 1rem !important;
                     }
                     .preschool-program-label {
-                        top: 4px !important;
-                        font-size: 0.66rem !important;
+                        top: 5px !important;
+                        font-size: 0.64rem !important;
                     }
                 }
             `}</style>
@@ -570,12 +582,12 @@ const PreschoolContactSection = () => {
                                     <div style={{ position: 'relative' }}>
                                         <label
                                             htmlFor="contact-program"
-                                            className="preschool-program-label"
+                                            className="preschool-program-label preschool-float-label"
                                             style={{
                                                 position: 'absolute',
                                                 left: '16px',
-                                                top: '8px',
-                                                fontSize: '0.7rem',
+                                                top: '6px',
+                                                fontSize: '0.68rem',
                                                 fontWeight: 600,
                                                 color: errors.program ? '#EF4444' : focusedField === 'program' ? '#3B82F6' : '#94A3B8',
                                                 transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -591,18 +603,19 @@ const PreschoolContactSection = () => {
                                         <select
                                             id="contact-program"
                                             name="program"
-                                            className="preschool-program-select"
+                                            className="preschool-program-select preschool-float-input"
                                             value={formData.program}
                                             onChange={handleChange}
                                             onFocus={() => setFocusedField('program')}
                                             onBlur={() => setFocusedField(null)}
                                             style={{
                                                 width: '100%',
-                                                padding: '26px 40px 10px 16px',
+                                                padding: '30px 40px 12px 16px',
                                                 borderRadius: '12px',
                                                 border: `1.5px solid ${errors.program ? '#FCA5A5' : focusedField === 'program' ? '#3B82F6' : '#E2E8F0'}`,
                                                 background: focusedField === 'program' ? '#FFFFFF' : '#F8FAFC',
-                                                fontSize: '0.95rem',
+                                                fontSize: '1rem',
+                                                lineHeight: 1.4,
                                                 color: formData.program ? '#1E293B' : '#94A3B8',
                                                 outline: 'none',
                                                 appearance: 'none',
@@ -639,12 +652,13 @@ const PreschoolContactSection = () => {
                                     {/* Message */}
                                     <div style={{ position: 'relative' }}>
                                         <label
+                                            className="preschool-float-label"
                                             htmlFor="contact-message"
                                             style={{
                                                 position: 'absolute',
                                                 left: '16px',
-                                                top: '8px',
-                                                fontSize: '0.7rem',
+                                                top: '6px',
+                                                fontSize: '0.68rem',
                                                 fontWeight: 600,
                                                 color: focusedField === 'message' ? '#3B82F6' : '#94A3B8',
                                                 transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -658,6 +672,7 @@ const PreschoolContactSection = () => {
                                             Message (Optional)
                                         </label>
                                         <textarea
+                                            className="preschool-float-input"
                                             id="contact-message"
                                             rows="3"
                                             name="message"
@@ -667,11 +682,12 @@ const PreschoolContactSection = () => {
                                             onBlur={() => setFocusedField(null)}
                                             style={{
                                                 width: '100%',
-                                                padding: formData.message || focusedField === 'message' ? '26px 16px 10px' : '16px',
+                                                padding: formData.message || focusedField === 'message' ? '30px 16px 12px' : '18px 16px',
                                                 borderRadius: '12px',
                                                 border: `1.5px solid ${focusedField === 'message' ? '#3B82F6' : '#E2E8F0'}`,
                                                 background: focusedField === 'message' ? '#FFFFFF' : '#F8FAFC',
-                                                fontSize: '0.95rem',
+                                                fontSize: '1rem',
+                                                lineHeight: 1.4,
                                                 color: '#1E293B',
                                                 outline: 'none',
                                                 resize: 'vertical',

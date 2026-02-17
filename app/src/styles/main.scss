@@ -111,7 +111,7 @@
 }
 
 html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
 }
 
 body {
@@ -1787,6 +1787,14 @@ p, span, a, li {
 input, select, textarea {
     max-width: 100%;
     box-sizing: border-box;
+}
+
+// Keep form controls fully interactive across overlays/animation wrappers
+input,
+textarea,
+select,
+button {
+    pointer-events: auto;
 }
 
 // Content justification (website content only, excludes footer)

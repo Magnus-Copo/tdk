@@ -1,6 +1,89 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const PreschoolFormField = ({
+    label,
+    name,
+    type = 'text',
+    required = true,
+    focusedField,
+    errors,
+    formData,
+    handleChange,
+    setFocusedField,
+}) => {
+    const isFocused = focusedField === name;
+    const hasError = errors[name];
+
+    return (
+        <div style={{ position: 'relative' }}>
+            <label
+                htmlFor={`contact-${name}`}
+                style={{
+                    position: 'absolute',
+                    left: '16px',
+                    top: '8px',
+                    fontSize: '0.7rem',
+                    fontFamily: "'Nunito', sans-serif",
+                    fontWeight: 600,
+                    color: hasError ? '#EF4444' : isFocused ? '#3B82F6' : '#94A3B8',
+                    letterSpacing: '0.03em',
+                    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                    pointerEvents: 'none',
+                    zIndex: 1,
+                    backgroundColor: '#FFFFFF',
+                    paddingLeft: '4px',
+                    paddingRight: '4px',
+                }}
+            >
+                {label} {required && <span style={{ color: '#EF4444' }}>*</span>}
+            </label>
+            <input
+                id={`contact-${name}`}
+                type={type}
+                name={name}
+                value={formData[name]}
+                onChange={handleChange}
+                onFocus={() => setFocusedField(name)}
+                onBlur={() => setFocusedField(null)}
+                inputMode={type === 'tel' ? 'numeric' : undefined}
+                maxLength={type === 'tel' ? 10 : undefined}
+                autoComplete={name === 'phoneNumber' ? 'tel' : name === 'parentName' || name === 'childName' ? 'name' : undefined}
+                style={{
+                    width: '100%',
+                    padding: '26px 16px 10px',
+                    borderRadius: '12px',
+                    border: `1.5px solid ${hasError ? '#FCA5A5' : isFocused ? '#3B82F6' : '#E2E8F0'}`,
+                    background: isFocused ? '#FFFFFF' : '#F8FAFC',
+                    fontSize: '0.95rem',
+                    fontFamily: "'Nunito', 'Inter', sans-serif",
+                    color: '#1E293B',
+                    letterSpacing: '0.005em',
+                    outline: 'none',
+                    transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                    boxShadow: isFocused
+                        ? '0 0 0 3px rgba(59,130,246,0.08), 0 4px 12px rgba(59,130,246,0.06)'
+                        : hasError
+                            ? '0 0 0 3px rgba(239,68,68,0.06)'
+                            : '0 1px 2px rgba(0,0,0,0.04)',
+                }}
+            />
+            <AnimatePresence>
+                {hasError && (
+                    <motion.p
+                        initial={{ opacity: 0, y: -4, height: 0 }}
+                        animate={{ opacity: 1, y: 0, height: 'auto' }}
+                        exit={{ opacity: 0, y: -4, height: 0 }}
+                        style={{ fontSize: '0.75rem', color: '#EF4444', fontWeight: 500, margin: '4px 0 0 4px' }}
+                    >
+                        {errors[name]}
+                    </motion.p>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+};
+
 /**
  * PreschoolContactSection — Light, airy contact section with
  * micro-level UI/UX polish: subtle parallax, staggered reveals,
@@ -22,38 +105,53 @@ const PreschoolContactSection = () => {
     const [focusedField, setFocusedField] = useState(null);
     const formCardRef = useRef(null);
 
+    const fullNameRegex = /^[A-Za-z]+(?:[\s'-][A-Za-z]+)+$/;
+
+    const validateField = (name, value) => {
+        const trimmed = String(value || '').trim();
+
+        switch (name) {
+            case 'parentName':
+                if (!trimmed) return "Parent's name is required";
+                if (!fullNameRegex.test(trimmed)) return 'Enter full name (first and last name)';
+                return '';
+            case 'phoneNumber': {
+                if (!trimmed) return 'Phone number is required';
+                if (!/^[6-9]\d{9}$/.test(trimmed) || /^(\d)\1{9}$/.test(trimmed)) {
+                    return 'Please enter a valid 10-digit phone number';
+                }
+                return '';
+            }
+            case 'childName':
+                if (!trimmed) return "Child's name is required";
+                if (!fullNameRegex.test(trimmed)) return 'Enter full name (first and last name)';
+                return '';
+            case 'childAge':
+                if (!trimmed) return "Child's age is required";
+                return '';
+            case 'program':
+                if (!trimmed) return 'Please select a program';
+                return '';
+            default:
+                return '';
+        }
+    };
+
     const validate = () => {
         const newErrors = {};
-        if (!formData.parentName.trim()) {
-            newErrors.parentName = "Parent's name is required";
-        } else if (formData.parentName.length < 3) {
-            newErrors.parentName = "Name must be at least 3 characters";
-        }
-        const phoneRegex = /^[0-9]{10}$/;
-        if (!formData.phoneNumber.trim()) {
-            newErrors.phoneNumber = "Phone number is required";
-        } else if (!phoneRegex.test(formData.phoneNumber.replace(/[\s-]/g, ''))) {
-            newErrors.phoneNumber = "Please enter a valid 10-digit number";
-        }
-        if (!formData.childName.trim()) {
-            newErrors.childName = "Child's name is required";
-        }
-        if (!formData.childAge.trim()) {
-            newErrors.childAge = "Child's age is required";
-        }
-        if (!formData.program) {
-            newErrors.program = "Please select a program";
-        }
+        ['parentName', 'phoneNumber', 'childName', 'childAge', 'program'].forEach((fieldName) => {
+            const error = validateField(fieldName, formData[fieldName]);
+            if (error) newErrors[fieldName] = error;
+        });
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-        if (errors[name]) {
-            setErrors(prev => ({ ...prev, [name]: null }));
-        }
+        const nextValue = name === 'phoneNumber' ? value.replace(/\D/g, '').slice(0, 10) : value;
+        setFormData(prev => ({ ...prev, [name]: nextValue }));
+        setErrors(prev => ({ ...prev, [name]: validateField(name, nextValue) }));
     };
 
     const handleSubmit = async (e) => {
@@ -112,80 +210,6 @@ const PreschoolContactSection = () => {
             accentRing: 'rgba(139,92,246,0.12)',
         },
     ];
-
-    /* ─── Floating label input component ─── */
-    const FormField = ({ label, name, type = 'text', placeholder, required = true }) => {
-        const isFocused = focusedField === name;
-        const hasError = errors[name];
-
-        return (
-            <div style={{ position: 'relative' }}>
-                {/* Floating label */}
-                <label
-                    htmlFor={`contact-${name}`}
-                    style={{
-                        position: 'absolute',
-                        left: '16px',
-                        top: '8px',
-                        fontSize: '0.7rem',
-                        fontFamily: "'Nunito', sans-serif",
-                        fontWeight: 600,
-                        color: hasError ? '#EF4444' : isFocused ? '#3B82F6' : '#94A3B8',
-                        letterSpacing: '0.03em',
-                        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                        pointerEvents: 'none',
-                        zIndex: 1,
-                        backgroundColor: '#FFFFFF',
-                        paddingLeft: '4px',
-                        paddingRight: '4px',
-                    }}
-                >
-                    {label} {required && <span style={{ color: '#EF4444' }}>*</span>}
-                </label>
-                <input
-                    id={`contact-${name}`}
-                    type={type}
-                    name={name}
-                    value={formData[name]}
-                    onChange={handleChange}
-                    onFocus={() => setFocusedField(name)}
-                    onBlur={() => setFocusedField(null)}
-                    placeholder={isFocused ? placeholder : ''}
-                    style={{
-                        width: '100%',
-                        padding: '26px 16px 10px',
-                        borderRadius: '12px',
-                        border: `1.5px solid ${hasError ? '#FCA5A5' : isFocused ? '#3B82F6' : '#E2E8F0'}`,
-                        background: isFocused ? '#FFFFFF' : '#F8FAFC',
-                        fontSize: '0.95rem',
-                        fontFamily: "'Nunito', 'Inter', sans-serif",
-                        color: '#1E293B',
-                        letterSpacing: '0.005em',
-                        outline: 'none',
-                        transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
-                        boxShadow: isFocused
-                            ? '0 0 0 3px rgba(59,130,246,0.08), 0 4px 12px rgba(59,130,246,0.06)'
-                            : hasError
-                                ? '0 0 0 3px rgba(239,68,68,0.06)'
-                                : '0 1px 2px rgba(0,0,0,0.04)',
-                    }}
-                />
-                {/* Error message with slide animation */}
-                <AnimatePresence>
-                    {hasError && (
-                        <motion.p
-                            initial={{ opacity: 0, y: -4, height: 0 }}
-                            animate={{ opacity: 1, y: 0, height: 'auto' }}
-                            exit={{ opacity: 0, y: -4, height: 0 }}
-                            style={{ fontSize: '0.75rem', color: '#EF4444', fontWeight: 500, margin: '4px 0 0 4px' }}
-                        >
-                            {errors[name]}
-                        </motion.p>
-                    )}
-                </AnimatePresence>
-            </div>
-        );
-    };
 
     return (
         <>
@@ -532,14 +556,14 @@ const PreschoolContactSection = () => {
                                 >
                                     {/* Row 1 */}
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                        <FormField label="Parent's Name" name="parentName" placeholder="John Doe" />
-                                        <FormField label="Phone Number" name="phoneNumber" type="tel" placeholder="9876543210" />
+                                        <PreschoolFormField label="Parent's Name" name="parentName" focusedField={focusedField} errors={errors} formData={formData} handleChange={handleChange} setFocusedField={setFocusedField} />
+                                        <PreschoolFormField label="Phone Number" name="phoneNumber" type="tel" focusedField={focusedField} errors={errors} formData={formData} handleChange={handleChange} setFocusedField={setFocusedField} />
                                     </div>
 
                                     {/* Row 2 */}
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                        <FormField label="Child's Name" name="childName" placeholder="Emma" />
-                                        <FormField label="Child's Age / DOB" name="childAge" placeholder="e.g. 3 years" />
+                                        <PreschoolFormField label="Child's Name" name="childName" focusedField={focusedField} errors={errors} formData={formData} handleChange={handleChange} setFocusedField={setFocusedField} />
+                                        <PreschoolFormField label="Child's Age / DOB" name="childAge" focusedField={focusedField} errors={errors} formData={formData} handleChange={handleChange} setFocusedField={setFocusedField} />
                                     </div>
 
                                     {/* Program Select */}
@@ -641,7 +665,6 @@ const PreschoolContactSection = () => {
                                             onChange={handleChange}
                                             onFocus={() => setFocusedField('message')}
                                             onBlur={() => setFocusedField(null)}
-                                            placeholder={focusedField === 'message' ? 'Any specific questions or requests?' : ''}
                                             style={{
                                                 width: '100%',
                                                 padding: formData.message || focusedField === 'message' ? '26px 16px 10px' : '16px',

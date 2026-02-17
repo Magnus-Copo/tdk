@@ -1,6 +1,83 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const PUCFloatingInput = ({
+    name,
+    label,
+    type = 'text',
+    focusedField,
+    errors,
+    formData,
+    handleChange,
+    setFocusedField,
+}) => {
+    const isFocused = focusedField === name;
+    const hasError = !!errors[name];
+
+    return (
+        <div style={{ position: 'relative', marginBottom: '20px' }}>
+            <input
+                id={`puc-${name}`}
+                type={type}
+                name={name}
+                value={formData[name]}
+                onChange={(e) => handleChange(name, e.target.value)}
+                onFocus={() => setFocusedField(name)}
+                onBlur={() => setFocusedField(null)}
+                inputMode={type === 'tel' ? 'numeric' : undefined}
+                maxLength={type === 'tel' ? 10 : undefined}
+                autoComplete={name === 'phoneNumber' ? 'tel' : name === 'parentName' || name === 'studentName' ? 'name' : undefined}
+                style={{
+                    width: '100%',
+                    padding: '24px 16px 8px',
+                    fontFamily: "'Nunito', 'Inter', sans-serif",
+                    fontSize: '0.95rem',
+                    fontWeight: 600,
+                    color: '#1E293B',
+                    background: isFocused ? 'rgba(255,255,255,0.95)' : 'rgba(248,250,252,0.8)',
+                    border: `1.5px solid ${hasError ? '#EF4444' : isFocused ? '#6366F1' : 'rgba(148,163,184,0.25)'}`,
+                    borderRadius: '14px',
+                    outline: 'none',
+                    transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)',
+                    boxSizing: 'border-box',
+                }}
+            />
+            <label
+                htmlFor={`puc-${name}`}
+                style={{
+                    position: 'absolute',
+                    left: '16px',
+                    top: '6px',
+                    fontSize: '0.78rem',
+                    fontFamily: "'Nunito', sans-serif",
+                    fontWeight: 600,
+                    color: hasError ? '#EF4444' : isFocused ? '#6366F1' : '#78869B',
+                    transition: 'all 0.2s cubic-bezier(0.4,0,0.2,1)',
+                    pointerEvents: 'none',
+                    zIndex: 1,
+                    backgroundColor: '#FFFFFF',
+                    paddingLeft: '4px',
+                    paddingRight: '4px',
+                }}
+            >
+                {label}
+            </label>
+            <AnimatePresence>
+                {hasError && (
+                    <motion.p
+                        initial={{ opacity: 0, y: -4, height: 0 }}
+                        animate={{ opacity: 1, y: 0, height: 'auto' }}
+                        exit={{ opacity: 0, y: -4, height: 0 }}
+                        style={{ fontSize: '0.8rem', color: '#EF4444', fontWeight: 500, margin: '4px 0 0 4px' }}
+                    >
+                        {errors[name]}
+                    </motion.p>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+};
+
 /**
  * PUCContactSection — Contact form for PUC tuition enquiries.
  * Adapted from PrimaryContactSection with PUC-specific fields:
@@ -24,14 +101,43 @@ const PUCContactSection = () => {
     const [focusedField, setFocusedField] = useState(null);
     const formCardRef = useRef(null);
 
+    const fullNameRegex = /^[A-Za-z]+(?:[\s'-][A-Za-z]+)+$/;
+
+    const validateField = (name, value) => {
+        const trimmed = String(value || '').trim();
+
+        switch (name) {
+            case 'parentName':
+                if (!trimmed) return 'Parent name is required';
+                if (!fullNameRegex.test(trimmed)) return 'Enter full name (first and last name)';
+                return '';
+            case 'phoneNumber':
+                if (!trimmed) return 'Phone number is required';
+                if (!/^[6-9]\d{9}$/.test(trimmed) || /^(\d)\1{9}$/.test(trimmed)) return 'Please enter a valid 10-digit phone number';
+                return '';
+            case 'studentName':
+                if (!trimmed) return 'Student name is required';
+                if (!fullNameRegex.test(trimmed)) return 'Enter full name (first and last name)';
+                return '';
+            case 'stream':
+                if (!trimmed) return 'Please select a stream';
+                return '';
+            case 'pucYear':
+                if (!trimmed) return 'Please select PUC year';
+                return '';
+            default:
+                return '';
+        }
+    };
+
     /** @returns {boolean} */
     const validate = () => {
         const newErrors = {};
-        if (!formData.parentName.trim()) newErrors.parentName = 'Parent name is required';
-        if (!formData.phoneNumber.trim()) newErrors.phoneNumber = 'Phone number is required';
-        else if (!/^[6-9]\d{9}$/.test(formData.phoneNumber.trim())) newErrors.phoneNumber = 'Enter a valid 10-digit number';
-        if (!formData.studentName.trim()) newErrors.studentName = 'Student name is required';
-        if (!formData.stream) newErrors.stream = 'Please select a stream';
+        ['parentName', 'phoneNumber', 'studentName', 'stream', 'pucYear'].forEach((fieldName) => {
+            const error = validateField(fieldName, formData[fieldName]);
+            if (error) newErrors[fieldName] = error;
+        });
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -49,73 +155,9 @@ const PUCContactSection = () => {
     };
 
     const handleChange = (name, value) => {
-        setFormData((p) => ({ ...p, [name]: value }));
-        if (errors[name]) setErrors((p) => ({ ...p, [name]: undefined }));
-    };
-
-    /* ── Reusable floating-label input ── */
-    const FloatingInput = ({ name, label, type = 'text' }) => {
-        const isFocused = focusedField === name;
-        const hasError = !!errors[name];
-
-        return (
-            <div style={{ position: 'relative', marginBottom: '20px' }}>
-                <input
-                    id={`puc-${name}`}
-                    type={type}
-                    value={formData[name]}
-                    onChange={(e) => handleChange(name, e.target.value)}
-                    onFocus={() => setFocusedField(name)}
-                    onBlur={() => setFocusedField(null)}
-                    style={{
-                        width: '100%',
-                        padding: '24px 16px 8px',
-                        fontFamily: "'Nunito', 'Inter', sans-serif",
-                        fontSize: '0.95rem',
-                        fontWeight: 600,
-                        color: '#1E293B',
-                        background: isFocused ? 'rgba(255,255,255,0.95)' : 'rgba(248,250,252,0.8)',
-                        border: `1.5px solid ${hasError ? '#EF4444' : isFocused ? '#6366F1' : 'rgba(148,163,184,0.25)'}`,
-                        borderRadius: '14px',
-                        outline: 'none',
-                        transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)',
-                        boxSizing: 'border-box',
-                    }}
-                />
-                <label
-                    htmlFor={`puc-${name}`}
-                    style={{
-                        position: 'absolute',
-                        left: '16px',
-                        top: '6px',
-                        fontSize: '0.78rem',
-                        fontFamily: "'Nunito', sans-serif",
-                        fontWeight: 600,
-                        color: hasError ? '#EF4444' : isFocused ? '#6366F1' : '#78869B',
-                        transition: 'all 0.2s cubic-bezier(0.4,0,0.2,1)',
-                        pointerEvents: 'none',
-                        zIndex: 1,
-                        backgroundColor: '#FFFFFF',
-                        paddingLeft: '4px',
-                        paddingRight: '4px',
-                    }}
-                >
-                    {label}
-                </label>
-                <AnimatePresence>
-                    {hasError && (
-                        <motion.p
-                            initial={{ opacity: 0, y: -4, height: 0 }}
-                            animate={{ opacity: 1, y: 0, height: 'auto' }}
-                            exit={{ opacity: 0, y: -4, height: 0 }}
-                            style={{ fontSize: '0.8rem', color: '#EF4444', fontWeight: 500, margin: '4px 0 0 4px' }}
-                        >
-                            {errors[name]}
-                        </motion.p>
-                    )}
-                </AnimatePresence>
-            </div>
-        );
+        const nextValue = name === 'phoneNumber' ? value.replace(/\D/g, '').slice(0, 10) : value;
+        setFormData((p) => ({ ...p, [name]: nextValue }));
+        setErrors((p) => ({ ...p, [name]: validateField(name, nextValue) }));
     };
 
     /* ── Contact info items ── */
@@ -458,14 +500,15 @@ const PUCContactSection = () => {
                                     onSubmit={handleSubmit}
                                     noValidate
                                 >
-                                    <FloatingInput name="parentName" label="Parent / Guardian Name *" />
-                                    <FloatingInput name="phoneNumber" label="Phone Number *" type="tel" />
-                                    <FloatingInput name="studentName" label="Student Name *" />
+                                    <PUCFloatingInput name="parentName" label="Parent / Guardian Name *" focusedField={focusedField} errors={errors} formData={formData} handleChange={handleChange} setFocusedField={setFocusedField} />
+                                    <PUCFloatingInput name="phoneNumber" label="Phone Number *" type="tel" focusedField={focusedField} errors={errors} formData={formData} handleChange={handleChange} setFocusedField={setFocusedField} />
+                                    <PUCFloatingInput name="studentName" label="Student Name *" focusedField={focusedField} errors={errors} formData={formData} handleChange={handleChange} setFocusedField={setFocusedField} />
 
                                     {/* Stream dropdown */}
                                     <div style={{ position: 'relative', marginBottom: '20px' }}>
                                         <select
                                             id="puc-stream"
+                                            name="stream"
                                             className="puc-select-field"
                                             value={formData.stream}
                                             onChange={(e) => handleChange('stream', e.target.value)}
@@ -539,6 +582,7 @@ const PUCContactSection = () => {
                                     <div style={{ position: 'relative', marginBottom: '20px' }}>
                                         <select
                                             id="puc-year"
+                                            name="pucYear"
                                             className="puc-select-field"
                                             value={formData.pucYear}
                                             onChange={(e) => handleChange('pucYear', e.target.value)}
@@ -552,7 +596,7 @@ const PUCContactSection = () => {
                                                 fontWeight: 600,
                                                 color: formData.pucYear ? '#1E293B' : '#94A3B8',
                                                 background: focusedField === 'pucYear' ? 'rgba(255,255,255,0.95)' : 'rgba(248,250,252,0.8)',
-                                                border: `1.5px solid ${focusedField === 'pucYear' ? '#6366F1' : 'rgba(148,163,184,0.25)'}`,
+                                                border: `1.5px solid ${errors.pucYear ? '#EF4444' : focusedField === 'pucYear' ? '#6366F1' : 'rgba(148,163,184,0.25)'}`,
                                                 borderRadius: '14px',
                                                 outline: 'none',
                                                 appearance: 'none',
@@ -574,7 +618,7 @@ const PUCContactSection = () => {
                                                 top: '6px',
                                                 fontSize: '0.78rem',
                                                 fontWeight: 600,
-                                                color: focusedField === 'pucYear' ? '#6366F1' : '#78869B',
+                                                color: errors.pucYear ? '#EF4444' : focusedField === 'pucYear' ? '#6366F1' : '#78869B',
                                                 transition: 'all 0.2s cubic-bezier(0.4,0,0.2,1)',
                                                 pointerEvents: 'none',
                                                 zIndex: 1,
@@ -583,7 +627,7 @@ const PUCContactSection = () => {
                                                 paddingRight: '4px',
                                             }}
                                         >
-                                            PUC Year
+                                            PUC Year *
                                         </label>
                                         <svg
                                             style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
@@ -591,112 +635,125 @@ const PUCContactSection = () => {
                                         >
                                             <polyline points="6 9 12 15 18 9" />
                                         </svg>
+                                        <AnimatePresence>
+                                            {errors.pucYear && (
+                                                <motion.p
+                                                    initial={{ opacity: 0, y: -4, height: 0 }}
+                                                    animate={{ opacity: 1, y: 0, height: 'auto' }}
+                                                    exit={{ opacity: 0, y: -4, height: 0 }}
+                                                    style={{ fontSize: '0.8rem', color: '#EF4444', fontWeight: 500, margin: '4px 0 0 4px' }}
+                                                >
+                                                    {errors.pucYear}
+                                                </motion.p>
+                                            )}
+                                        </AnimatePresence>
                                     </div>
 
-                                    {/* Message textarea */}
-                                    <div style={{ position: 'relative', marginBottom: '24px' }}>
-                                        <textarea
-                                            id="puc-message"
-                                            value={formData.message}
-                                            onChange={(e) => handleChange('message', e.target.value)}
-                                            onFocus={() => setFocusedField('message')}
-                                            onBlur={() => setFocusedField(null)}
-                                            rows={3}
-                                            style={{
-                                                width: '100%',
-                                                padding: '18px 16px 8px',
-                                                fontFamily: "'Nunito', 'Inter', sans-serif",
-                                                fontSize: '0.95rem',
-                                                fontWeight: 600,
-                                                color: '#1E293B',
-                                                background: focusedField === 'message' ? 'rgba(255,255,255,0.95)' : 'rgba(248,250,252,0.8)',
-                                                border: `1.5px solid ${focusedField === 'message' ? '#6366F1' : 'rgba(148,163,184,0.25)'}`,
-                                                borderRadius: '14px',
-                                                outline: 'none',
-                                                resize: 'vertical',
-                                                minHeight: '80px',
-                                                transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)',
-                                                boxSizing: 'border-box',
-                                            }}
-                                        />
-                                        <label
-                                            htmlFor="puc-message"
-                                            style={{
-                                                position: 'absolute',
-                                                left: '16px',
-                                                top: focusedField === 'message' || formData.message ? '6px' : '14px',
-                                                fontSize: focusedField === 'message' || formData.message ? '0.78rem' : '0.92rem',
-                                                fontWeight: 600,
-                                                color: focusedField === 'message' ? '#6366F1' : '#78869B',
-                                                transition: 'all 0.2s cubic-bezier(0.4,0,0.2,1)',
-                                                pointerEvents: 'none',
-                                            }}
-                                        >
-                                            Message (Optional)
-                                        </label>
-                                    </div>
-
-                                    {/* Submit button */}
-                                    <motion.button
-                                        type="submit"
-                                        disabled={isSubmitting}
-                                        whileHover={{ scale: 1.02 }}
-                                        whileTap={{ scale: 0.98 }}
-                                        style={{
-                                            width: '100%',
-                                            padding: '14px',
-                                            fontFamily: "'Nunito', sans-serif",
-                                            fontSize: '0.95rem',
-                                            fontWeight: 700,
-                                            color: '#FFFFFF',
-                                            background: isSubmitting
-                                                ? 'linear-gradient(135deg, #94A3B8, #CBD5E1)'
-                                                : 'linear-gradient(135deg, #6366F1 0%, #3B82F6 100%)',
-                                            border: 'none',
-                                            borderRadius: '14px',
-                                            cursor: isSubmitting ? 'wait' : 'pointer',
-                                            transition: 'all 0.3s ease',
-                                            boxShadow: isSubmitting ? 'none' : '0 4px 16px rgba(99,102,241,0.3)',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            gap: '8px',
-                                        }}
-                                    >
-                                        {isSubmitting ? (
-                                            <>
-                                                <motion.div
-                                                    animate={{ rotate: 360 }}
-                                                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                                            {/* Message textarea */}
+                                            <div style={{ position: 'relative', marginBottom: '24px' }}>
+                                                <textarea
+                                                    id="puc-message"
+                                                    name="message"
+                                                    value={formData.message}
+                                                    onChange={(e) => handleChange('message', e.target.value)}
+                                                    onFocus={() => setFocusedField('message')}
+                                                    onBlur={() => setFocusedField(null)}
+                                                    rows={3}
                                                     style={{
-                                                        width: '18px',
-                                                        height: '18px',
-                                                        border: '2px solid rgba(255,255,255,0.3)',
-                                                        borderTopColor: '#FFFFFF',
-                                                        borderRadius: '50%',
+                                                        width: '100%',
+                                                        padding: '18px 16px 8px',
+                                                        fontFamily: "'Nunito', 'Inter', sans-serif",
+                                                        fontSize: '0.95rem',
+                                                        fontWeight: 600,
+                                                        color: '#1E293B',
+                                                        background: focusedField === 'message' ? 'rgba(255,255,255,0.95)' : 'rgba(248,250,252,0.8)',
+                                                        border: `1.5px solid ${focusedField === 'message' ? '#6366F1' : 'rgba(148,163,184,0.25)'}`,
+                                                        borderRadius: '14px',
+                                                        outline: 'none',
+                                                        resize: 'vertical',
+                                                        minHeight: '80px',
+                                                        transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)',
+                                                        boxSizing: 'border-box',
                                                     }}
                                                 />
-                                                Sending...
-                                            </>
-                                        ) : (
-                                            <>
-                                                Submit Enquiry
-                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                    <line x1="5" y1="12" x2="19" y2="12" />
-                                                    <polyline points="12 5 19 12 12 19" />
-                                                </svg>
-                                            </>
-                                        )}
-                                    </motion.button>
-                                </motion.form>
-                            )}
-                        </AnimatePresence>
-                    </motion.div>
-                </div>
-            </div>
-            </section>
-        </>
-    );
-};
+                                                <label
+                                                    htmlFor="puc-message"
+                                                    style={{
+                                                        position: 'absolute',
+                                                        left: '16px',
+                                                        top: focusedField === 'message' || formData.message ? '6px' : '14px',
+                                                        fontSize: focusedField === 'message' || formData.message ? '0.78rem' : '0.92rem',
+                                                        fontWeight: 600,
+                                                        color: focusedField === 'message' ? '#6366F1' : '#78869B',
+                                                        transition: 'all 0.2s cubic-bezier(0.4,0,0.2,1)',
+                                                        pointerEvents: 'none',
+                                                    }}
+                                                >
+                                                    Message (Optional)
+                                                </label>
+                                            </div>
+
+                                            {/* Submit button */}
+                                            <motion.button
+                                                type="submit"
+                                                disabled={isSubmitting}
+                                                whileHover={{ scale: 1.02 }}
+                                                whileTap={{ scale: 0.98 }}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '14px',
+                                                    fontFamily: "'Nunito', sans-serif",
+                                                    fontSize: '0.95rem',
+                                                    fontWeight: 700,
+                                                    color: '#FFFFFF',
+                                                    background: isSubmitting
+                                                        ? 'linear-gradient(135deg, #94A3B8, #CBD5E1)'
+                                                        : 'linear-gradient(135deg, #6366F1 0%, #3B82F6 100%)',
+                                                    border: 'none',
+                                                    borderRadius: '14px',
+                                                    cursor: isSubmitting ? 'wait' : 'pointer',
+                                                    transition: 'all 0.3s ease',
+                                                    boxShadow: isSubmitting ? 'none' : '0 4px 16px rgba(99,102,241,0.3)',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    gap: '8px',
+                                                }}
+                                            >
+                                                {isSubmitting ? (
+                                                    <>
+                                                        <motion.div
+                                                            animate={{ rotate: 360 }}
+                                                            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                                                            style={{
+                                                                width: '18px',
+                                                                height: '18px',
+                                                                border: '2px solid rgba(255,255,255,0.3)',
+                                                                borderTopColor: '#FFFFFF',
+                                                                borderRadius: '50%',
+                                                            }}
+                                                        />
+                                                        Sending...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        Submit Enquiry
+                                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                            <line x1="5" y1="12" x2="19" y2="12" />
+                                                            <polyline points="12 5 19 12 12 19" />
+                                                        </svg>
+                                                    </>
+                                                )}
+                                            </motion.button>
+                                        </motion.form>
+                                    )}
+                                </AnimatePresence>
+                            </motion.div>
+                        </div>
+                    </div>
+                    </section>
+                </>
+            );
+        };
 
 export default PUCContactSection;

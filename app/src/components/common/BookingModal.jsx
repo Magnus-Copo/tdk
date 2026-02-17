@@ -3,22 +3,116 @@ import React, { useState, useEffect } from 'react';
 const BookingModal = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [formData, setFormData] = useState({
+        parentName: '',
+        childName: '',
+        email: '',
+        phone: '',
+        preferredDate: '',
+    });
+    const [errors, setErrors] = useState({});
+
+    const fullNameRegex = /^[A-Za-z]+(?:[\s'-][A-Za-z]+)+$/;
+    const gmailRegex = /^[A-Za-z][A-Za-z0-9._%+-]*@gmail\.com$/i;
+
+    const resetForm = () => {
+        setFormData({
+            parentName: '',
+            childName: '',
+            email: '',
+            phone: '',
+            preferredDate: '',
+        });
+        setErrors({});
+        setIsSubmitting(false);
+    };
+
+    const validateField = (name, value) => {
+        const trimmed = value.trim();
+        const today = new Date().toISOString().split('T')[0];
+
+        switch (name) {
+            case 'parentName':
+            case 'childName':
+                if (!trimmed) return 'This field is required';
+                if (!fullNameRegex.test(trimmed)) return 'Enter full name (first and last name)';
+                return '';
+            case 'email':
+                if (!trimmed) return 'Email is required';
+                if (!gmailRegex.test(trimmed)) return 'Use a valid Gmail (must start with a letter and end with @gmail.com)';
+                return '';
+            case 'phone': {
+                if (!trimmed) return 'Phone number is required';
+                const digitsOnly = trimmed.replace(/\D/g, '');
+                if (!/^[6-9]\d{9}$/.test(digitsOnly) || /^(\d)\1{9}$/.test(digitsOnly)) return 'Enter a valid 10-digit phone number';
+                return '';
+            }
+            case 'preferredDate':
+                if (!trimmed) return 'Preferred date is required';
+                if (trimmed < today) return 'Date cannot be in the past';
+                return '';
+            default:
+                return '';
+        }
+    };
+
+    const validateForm = () => {
+        const nextErrors = {};
+        Object.entries(formData).forEach(([name, value]) => {
+            const error = validateField(name, value);
+            if (error) nextErrors[name] = error;
+        });
+        return nextErrors;
+    };
 
     useEffect(() => {
         // Expose function to global window object for compatibility
-        globalThis.showBookingModal = () => setIsOpen(true);
+        globalThis.showBookingModal = () => {
+            setFormData({
+                parentName: '',
+                childName: '',
+                email: '',
+                phone: '',
+                preferredDate: '',
+            });
+            setErrors({});
+            setIsSubmitting(false);
+            setIsOpen(true);
+        };
         return () => {
             delete globalThis.showBookingModal;
         };
     }, []);
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        const nextValue = name === 'phone' ? value.replace(/\D/g, '').slice(0, 10) : value;
+        setFormData((prev) => ({ ...prev, [name]: nextValue }));
+        setErrors((prev) => ({ ...prev, [name]: validateField(name, nextValue) }));
+    };
+
+    const handleBlur = (e) => {
+        const { name, value } = e.target;
+        setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        const validationErrors = validateForm();
+        setErrors(validationErrors);
+
+        if (Object.keys(validationErrors).length > 0) {
+            return;
+        }
+
+        setIsSubmitting(true);
         // Simulate form submission
-        setIsOpen(false);
-        setShowSuccess(true);
-        // Reset form would go here if we were using controlled inputs, 
-        // but for now we let the unmounting handle it or just reset state
+        setTimeout(() => {
+            setIsOpen(false);
+            setShowSuccess(true);
+            resetForm();
+        }, 900);
     };
 
     const closeSuccess = () => {
@@ -46,35 +140,40 @@ const BookingModal = () => {
                             <h2 style={{ marginBottom: '8px', fontSize: '1.5rem', color: 'var(--color-neutral-900)' }}>Book a Trial Playdate</h2>
                             <p style={{ color: 'var(--color-neutral-700)', marginBottom: '24px' }}>Fill out the form below and we'll contact you to confirm your visit.</p>
 
-                            <form onSubmit={handleSubmit}>
+                            <form onSubmit={handleSubmit} noValidate>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ marginBottom: '16px' }}>
                                     <div>
                                         <label htmlFor="parentName" style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '6px', color: 'var(--color-neutral-900)' }}>Parent Name *</label>
-                                        <input type="text" id="parentName" required style={{ width: '100%', padding: '12px 16px', border: '2px solid #E0E7FF', borderRadius: '10px', fontSize: '1rem', outline: 'none' }} />
+                                        <input type="text" id="parentName" name="parentName" value={formData.parentName} onChange={handleChange} onBlur={handleBlur} required aria-invalid={!!errors.parentName} style={{ width: '100%', padding: '12px 16px', border: `2px solid ${errors.parentName ? '#EF4444' : '#E0E7FF'}`, borderRadius: '10px', fontSize: '1rem', outline: 'none' }} />
+                                        {errors.parentName && <p style={{ color: '#DC2626', fontSize: '0.8rem', marginTop: '6px' }}>{errors.parentName}</p>}
                                     </div>
                                     <div>
                                         <label htmlFor="childName" style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '6px', color: 'var(--color-neutral-900)' }}>Child Name *</label>
-                                        <input type="text" id="childName" required style={{ width: '100%', padding: '12px 16px', border: '2px solid #E0E7FF', borderRadius: '10px', fontSize: '1rem', outline: 'none' }} />
+                                        <input type="text" id="childName" name="childName" value={formData.childName} onChange={handleChange} onBlur={handleBlur} required aria-invalid={!!errors.childName} style={{ width: '100%', padding: '12px 16px', border: `2px solid ${errors.childName ? '#EF4444' : '#E0E7FF'}`, borderRadius: '10px', fontSize: '1rem', outline: 'none' }} />
+                                        {errors.childName && <p style={{ color: '#DC2626', fontSize: '0.8rem', marginTop: '6px' }}>{errors.childName}</p>}
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ marginBottom: '16px' }}>
                                     <div>
                                         <label htmlFor="email" style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '6px', color: 'var(--color-neutral-900)' }}>Email *</label>
-                                        <input type="email" id="email" required style={{ width: '100%', padding: '12px 16px', border: '2px solid #E0E7FF', borderRadius: '10px', fontSize: '1rem', outline: 'none' }} />
+                                        <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} onBlur={handleBlur} required autoComplete="email" aria-invalid={!!errors.email} style={{ width: '100%', padding: '12px 16px', border: `2px solid ${errors.email ? '#EF4444' : '#E0E7FF'}`, borderRadius: '10px', fontSize: '1rem', outline: 'none' }} />
+                                        {errors.email && <p style={{ color: '#DC2626', fontSize: '0.8rem', marginTop: '6px' }}>{errors.email}</p>}
                                     </div>
                                     <div>
                                         <label htmlFor="phone" style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '6px', color: 'var(--color-neutral-900)' }}>Phone *</label>
-                                        <input type="tel" id="phone" required style={{ width: '100%', padding: '12px 16px', border: '2px solid #E0E7FF', borderRadius: '10px', fontSize: '1rem', outline: 'none' }} />
+                                        <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} onBlur={handleBlur} required autoComplete="tel" inputMode="numeric" maxLength={10} aria-invalid={!!errors.phone} style={{ width: '100%', padding: '12px 16px', border: `2px solid ${errors.phone ? '#EF4444' : '#E0E7FF'}`, borderRadius: '10px', fontSize: '1rem', outline: 'none' }} />
+                                        {errors.phone && <p style={{ color: '#DC2626', fontSize: '0.8rem', marginTop: '6px' }}>{errors.phone}</p>}
                                     </div>
                                 </div>
 
                                 <div style={{ marginBottom: '24px' }}>
                                     <label htmlFor="date" style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '6px', color: 'var(--color-neutral-900)' }}>Preferred Date *</label>
-                                    <input type="date" id="date" required style={{ width: '100%', padding: '12px 16px', border: '2px solid #E0E7FF', borderRadius: '10px', fontSize: '1rem', outline: 'none' }} />
+                                    <input type="date" id="date" name="preferredDate" value={formData.preferredDate} onChange={handleChange} onBlur={handleBlur} min={new Date().toISOString().split('T')[0]} required aria-invalid={!!errors.preferredDate} style={{ width: '100%', padding: '12px 16px', border: `2px solid ${errors.preferredDate ? '#EF4444' : '#E0E7FF'}`, borderRadius: '10px', fontSize: '1rem', outline: 'none' }} />
+                                    {errors.preferredDate && <p style={{ color: '#DC2626', fontSize: '0.8rem', marginTop: '6px' }}>{errors.preferredDate}</p>}
                                 </div>
 
-                                <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>Book Trial Playdate</button>
+                                <button type="submit" className="btn-primary" disabled={isSubmitting} style={{ width: '100%', justifyContent: 'center', opacity: isSubmitting ? 0.7 : 1, cursor: isSubmitting ? 'wait' : 'pointer' }}>{isSubmitting ? 'Submitting...' : 'Book Trial Playdate'}</button>
                             </form>
                         </div>
                     </div>

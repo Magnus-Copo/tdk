@@ -17,11 +17,35 @@ const Header = () => {
 
     // Handle scroll effect for glassmorphism intensity
     useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 20);
+        let animationFrameId = null;
+        let ticking = false;
+        let previousScrolled = window.scrollY > 20;
+
+        setScrolled(previousScrolled);
+
+        const updateScrolledState = () => {
+            const nextScrolled = window.scrollY > 20;
+            if (nextScrolled !== previousScrolled) {
+                previousScrolled = nextScrolled;
+                setScrolled(nextScrolled);
+            }
+            ticking = false;
         };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+
+        const handleScroll = () => {
+            if (ticking) return;
+            ticking = true;
+            animationFrameId = window.requestAnimationFrame(updateScrolledState);
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            if (animationFrameId) {
+                window.cancelAnimationFrame(animationFrameId);
+            }
+        };
     }, []);
 
     // Navigation Links Data

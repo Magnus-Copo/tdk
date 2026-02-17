@@ -3,32 +3,115 @@ import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
 
 const Contact = () => {
-    const [formData, setFormData] = useState({
+    const initialFormData = {
         name: '',
         email: '',
         phone: '',
         subject: '',
         message: ''
+    };
+
+    const [formData, setFormData] = useState({
+        ...initialFormData
     });
+    const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState(null);
 
+    const fullNameRegex = /^[A-Za-z]+(?:[\s'-][A-Za-z]+)+$/;
+    const gmailRegex = /^[A-Za-z][A-Za-z0-9._%+-]*@gmail\.com$/i;
+
+    const validateField = (name, value) => {
+        const trimmed = value.trim();
+
+        switch (name) {
+            case 'name': {
+                if (!trimmed) return 'Full name is required';
+                if (!fullNameRegex.test(trimmed)) return 'Enter first name and last name (letters only)';
+                return '';
+            }
+            case 'email': {
+                if (!trimmed) return 'Email address is required';
+                if (!gmailRegex.test(trimmed)) {
+                    return 'Use a valid Gmail (must start with a letter and end with @gmail.com)';
+                }
+                return '';
+            }
+            case 'phone': {
+                if (!trimmed) return 'Phone number is required';
+                const digitsOnly = trimmed.replace(/\D/g, '');
+                if (!/^[6-9]\d{9}$/.test(digitsOnly) || /^(\d)\1{9}$/.test(digitsOnly)) {
+                    return 'Please enter a valid 10-digit phone number';
+                }
+                return '';
+            }
+            case 'subject': {
+                if (!trimmed) return 'Subject is required';
+                if (trimmed.length < 3) return 'Subject must be at least 3 characters';
+                return '';
+            }
+            case 'message': {
+                if (!trimmed) return 'Message is required';
+                if (trimmed.length < 10) return 'Message must be at least 10 characters';
+                return '';
+            }
+            default:
+                return '';
+        }
+    };
+
+    const validateForm = () => {
+        const validationErrors = {};
+        Object.entries(formData).forEach(([name, value]) => {
+            const error = validateField(name, value);
+            if (error) validationErrors[name] = error;
+        });
+        return validationErrors;
+    };
+
     const handleChange = (e) => {
+        const { name, value } = e.target;
+        const nextValue = name === 'phone' ? value.replace(/\D/g, '').slice(0, 10) : value;
+
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value
+            [name]: nextValue
         });
+
+        setErrors((prev) => ({
+            ...prev,
+            [name]: validateField(name, nextValue)
+        }));
+
+        if (submitStatus) {
+            setSubmitStatus(null);
+        }
+    };
+
+    const handleBlur = (e) => {
+        const { name, value } = e.target;
+        const error = validateField(name, value);
+        setErrors((prev) => ({ ...prev, [name]: error }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const validationErrors = validateForm();
+        setErrors(validationErrors);
+
+        if (Object.keys(validationErrors).length > 0) {
+            setSubmitStatus(null);
+            return;
+        }
+
         setIsSubmitting(true);
         
         // Simulate form submission
         setTimeout(() => {
             setSubmitStatus('success');
             setIsSubmitting(false);
-            setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+            setErrors({});
+            setFormData(initialFormData);
             
             setTimeout(() => setSubmitStatus(null), 5000);
         }, 1500);
@@ -296,7 +379,7 @@ const Contact = () => {
                         Fill out the form below and we'll get back to you as soon as possible.
                     </p>
 
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} noValidate>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))', gap: '20px', marginBottom: '20px' }}>
                             <div>
                                 <label htmlFor="contact-name" style={{ 
@@ -317,20 +400,22 @@ const Contact = () => {
                                     value={formData.name}
                                     onChange={handleChange}
                                     required
+                                    autoComplete="name"
+                                    aria-invalid={!!errors.name}
                                     style={{
                                         width: '100%',
                                         padding: '13px 16px',
                                         fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-                                        border: '1.5px solid #D9E2EC',
+                                        border: `1.5px solid ${errors.name ? '#EF4444' : '#D9E2EC'}`,
                                         borderRadius: '12px',
                                         outline: 'none',
                                         transition: 'all 0.25s ease',
                                         textAlign: 'left',
                                         background: '#F8FAFC'
                                     }}
-                                    onFocus={(e) => { e.target.style.borderColor = '#6366F1'; e.target.style.boxShadow = '0 0 0 4px rgba(99,102,241,0.12)'; e.target.style.background = '#FFFFFF'; }}
-                                    onBlur={(e) => { e.target.style.borderColor = '#D9E2EC'; e.target.style.boxShadow = 'none'; e.target.style.background = '#F8FAFC'; }}
+                                    onBlur={handleBlur}
                                 />
+                                {errors.name && <p style={{ color: '#DC2626', fontSize: '0.8rem', marginTop: '6px' }}>{errors.name}</p>}
                             </div>
                             <div>
                                 <label htmlFor="contact-email" style={{ 
@@ -351,20 +436,22 @@ const Contact = () => {
                                     value={formData.email}
                                     onChange={handleChange}
                                     required
+                                    autoComplete="email"
+                                    aria-invalid={!!errors.email}
                                     style={{
                                         width: '100%',
                                         padding: '13px 16px',
                                         fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-                                        border: '1.5px solid #D9E2EC',
+                                        border: `1.5px solid ${errors.email ? '#EF4444' : '#D9E2EC'}`,
                                         borderRadius: '12px',
                                         outline: 'none',
                                         transition: 'all 0.25s ease',
                                         textAlign: 'left',
                                         background: '#F8FAFC'
                                     }}
-                                    onFocus={(e) => { e.target.style.borderColor = '#6366F1'; e.target.style.boxShadow = '0 0 0 4px rgba(99,102,241,0.12)'; e.target.style.background = '#FFFFFF'; }}
-                                    onBlur={(e) => { e.target.style.borderColor = '#D9E2EC'; e.target.style.boxShadow = 'none'; e.target.style.background = '#F8FAFC'; }}
+                                    onBlur={handleBlur}
                                 />
+                                {errors.email && <p style={{ color: '#DC2626', fontSize: '0.8rem', marginTop: '6px' }}>{errors.email}</p>}
                             </div>
                         </div>
 
@@ -379,7 +466,7 @@ const Contact = () => {
                                     textAlign: 'left',
                                     letterSpacing: '0.02em'
                                 }}>
-                                    Phone Number
+                                    Phone Number *
                                 </label>
                                 <input
                                     id="contact-phone"
@@ -387,20 +474,25 @@ const Contact = () => {
                                     name="phone"
                                     value={formData.phone}
                                     onChange={handleChange}
+                                    required
+                                    autoComplete="tel"
+                                    inputMode="numeric"
+                                    maxLength={10}
+                                    aria-invalid={!!errors.phone}
                                     style={{
                                         width: '100%',
                                         padding: '13px 16px',
                                         fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-                                        border: '1.5px solid #D9E2EC',
+                                        border: `1.5px solid ${errors.phone ? '#EF4444' : '#D9E2EC'}`,
                                         borderRadius: '12px',
                                         outline: 'none',
                                         transition: 'all 0.25s ease',
                                         textAlign: 'left',
                                         background: '#F8FAFC'
                                     }}
-                                    onFocus={(e) => { e.target.style.borderColor = '#6366F1'; e.target.style.boxShadow = '0 0 0 4px rgba(99,102,241,0.12)'; e.target.style.background = '#FFFFFF'; }}
-                                    onBlur={(e) => { e.target.style.borderColor = '#D9E2EC'; e.target.style.boxShadow = 'none'; e.target.style.background = '#F8FAFC'; }}
+                                    onBlur={handleBlur}
                                 />
+                                {errors.phone && <p style={{ color: '#DC2626', fontSize: '0.8rem', marginTop: '6px' }}>{errors.phone}</p>}
                             </div>
                             <div>
                                 <label htmlFor="contact-subject" style={{ 
@@ -421,20 +513,21 @@ const Contact = () => {
                                     value={formData.subject}
                                     onChange={handleChange}
                                     required
+                                    aria-invalid={!!errors.subject}
                                     style={{
                                         width: '100%',
                                         padding: '13px 16px',
                                         fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-                                        border: '1.5px solid #D9E2EC',
+                                        border: `1.5px solid ${errors.subject ? '#EF4444' : '#D9E2EC'}`,
                                         borderRadius: '12px',
                                         outline: 'none',
                                         transition: 'all 0.25s ease',
                                         textAlign: 'left',
                                         background: '#F8FAFC'
                                     }}
-                                    onFocus={(e) => { e.target.style.borderColor = '#6366F1'; e.target.style.boxShadow = '0 0 0 4px rgba(99,102,241,0.12)'; e.target.style.background = '#FFFFFF'; }}
-                                    onBlur={(e) => { e.target.style.borderColor = '#D9E2EC'; e.target.style.boxShadow = 'none'; e.target.style.background = '#F8FAFC'; }}
+                                    onBlur={handleBlur}
                                 />
+                                {errors.subject && <p style={{ color: '#DC2626', fontSize: '0.8rem', marginTop: '6px' }}>{errors.subject}</p>}
                             </div>
                         </div>
 
@@ -456,12 +549,13 @@ const Contact = () => {
                                 value={formData.message}
                                 onChange={handleChange}
                                 required
+                                aria-invalid={!!errors.message}
                                 rows="6"
                                 style={{
                                     width: '100%',
                                     padding: '13px 16px',
                                     fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-                                    border: '1.5px solid #D9E2EC',
+                                    border: `1.5px solid ${errors.message ? '#EF4444' : '#D9E2EC'}`,
                                     borderRadius: '12px',
                                     outline: 'none',
                                     transition: 'all 0.25s ease',
@@ -470,9 +564,9 @@ const Contact = () => {
                                     textAlign: 'left',
                                     background: '#F8FAFC'
                                 }}
-                                onFocus={(e) => { e.target.style.borderColor = '#6366F1'; e.target.style.boxShadow = '0 0 0 4px rgba(99,102,241,0.12)'; e.target.style.background = '#FFFFFF'; }}
-                                onBlur={(e) => { e.target.style.borderColor = '#D9E2EC'; e.target.style.boxShadow = 'none'; e.target.style.background = '#F8FAFC'; }}
+                                onBlur={handleBlur}
                             />
+                            {errors.message && <p style={{ color: '#DC2626', fontSize: '0.8rem', marginTop: '6px' }}>{errors.message}</p>}
                         </div>
 
                         {submitStatus === 'success' && (

@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
+import { submitWeb3Form, getWeb3FormErrorMessage } from '../lib/web3forms';
+
+const CONTACT_WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_CONTACT_ACCESS_KEY;
 
 const Contact = () => {
     const initialFormData = {
@@ -17,6 +20,7 @@ const Contact = () => {
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState(null);
+    const [submitError, setSubmitError] = useState('');
 
     const fullNameRegex = /^[A-Za-z]+(?:[\s'-][A-Za-z]+)+$/;
     const emailRegex = /^[a-z][a-z0-9._%+-]*@[a-z][a-z-]*(\.[a-z][a-z-]*)+$/i;
@@ -86,6 +90,9 @@ const Contact = () => {
         if (submitStatus) {
             setSubmitStatus(null);
         }
+        if (submitError) {
+            setSubmitError('');
+        }
     };
 
     const handleBlur = (e) => {
@@ -105,16 +112,37 @@ const Contact = () => {
         }
 
         setIsSubmitting(true);
-        
-        // Simulate form submission
-        setTimeout(() => {
+        setSubmitStatus(null);
+        setSubmitError('');
+
+        try {
+            await submitWeb3Form({
+                accessKey: CONTACT_WEB3FORMS_KEY,
+                subject: `Contact Enquiry: ${formData.subject}`,
+                fromName: 'TDK Group Website - Contact Form',
+                replyTo: formData.email,
+                fields: {
+                    form_type: 'Contact Us',
+                    target_email: 'info@tdkgroup.edu',
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    enquiry_subject: formData.subject,
+                    message: formData.message,
+                },
+            });
+
             setSubmitStatus('success');
-            setIsSubmitting(false);
             setErrors({});
             setFormData(initialFormData);
-            
             setTimeout(() => setSubmitStatus(null), 5000);
-        }, 1500);
+        } catch (error) {
+            console.error('Contact form submission failed:', error);
+            setSubmitStatus('error');
+            setSubmitError(getWeb3FormErrorMessage(error));
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const contactInfo = [
@@ -585,6 +613,25 @@ const Contact = () => {
                                 }}
                             >
                                 Thank you! Your message has been sent successfully.
+                            </motion.div>
+                        )}
+
+                        {submitStatus === 'error' && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                style={{
+                                    padding: '12px 16px',
+                                    background: 'linear-gradient(180deg, #FEF2F2 0%, #FEE2E2 100%)',
+                                    color: '#991B1B',
+                                    borderRadius: '10px',
+                                    border: '1px solid #FECACA',
+                                    marginBottom: '16px',
+                                    fontSize: 'clamp(0.9rem, 2vw, 0.95rem)',
+                                    textAlign: 'center'
+                                }}
+                            >
+                                {submitError || 'Unable to send right now. Please try again in a moment.'}
                             </motion.div>
                         )}
 

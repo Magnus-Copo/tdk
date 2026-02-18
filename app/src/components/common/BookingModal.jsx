@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { submitWeb3Form, getWeb3FormErrorMessage } from '../../lib/web3forms';
+
+const ADMISSIONS_WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_ADMISSIONS_ACCESS_KEY;
 
 const BookingModal = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState('');
     const [formData, setFormData] = useState({
         parentName: '',
         childName: '',
@@ -26,6 +30,7 @@ const BookingModal = () => {
         });
         setErrors({});
         setIsSubmitting(false);
+        setSubmitError('');
     };
 
     const validateField = (name, value) => {
@@ -78,6 +83,7 @@ const BookingModal = () => {
             });
             setErrors({});
             setIsSubmitting(false);
+            setSubmitError('');
             setIsOpen(true);
         };
         return () => {
@@ -90,6 +96,9 @@ const BookingModal = () => {
         const nextValue = name === 'phone' ? value.replace(/\D/g, '').slice(0, 10) : value;
         setFormData((prev) => ({ ...prev, [name]: nextValue }));
         setErrors((prev) => ({ ...prev, [name]: validateField(name, nextValue) }));
+        if (submitError) {
+            setSubmitError('');
+        }
     };
 
     const handleBlur = (e) => {
@@ -97,7 +106,7 @@ const BookingModal = () => {
         setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const validationErrors = validateForm();
         setErrors(validationErrors);
@@ -107,12 +116,32 @@ const BookingModal = () => {
         }
 
         setIsSubmitting(true);
-        // Simulate form submission
-        setTimeout(() => {
+        setSubmitError('');
+        try {
+            await submitWeb3Form({
+                accessKey: ADMISSIONS_WEB3FORMS_KEY,
+                subject: 'Trial Playdate Booking Request',
+                fromName: 'TDK Group Website - Trial Booking',
+                replyTo: formData.email,
+                fields: {
+                    form_type: 'Trial Playdate Booking',
+                    target_email: 'londonkidshoskote@gmail.com',
+                    parent_name: formData.parentName,
+                    child_name: formData.childName,
+                    email: formData.email,
+                    phone: formData.phone,
+                    preferred_date: formData.preferredDate,
+                },
+            });
+
             setIsOpen(false);
             setShowSuccess(true);
             resetForm();
-        }, 900);
+        } catch (error) {
+            console.error('Booking form submission failed:', error);
+            setSubmitError(getWeb3FormErrorMessage(error));
+            setIsSubmitting(false);
+        }
     };
 
     const closeSuccess = () => {
@@ -172,6 +201,21 @@ const BookingModal = () => {
                                     <input type="date" id="date" name="preferredDate" value={formData.preferredDate} onChange={handleChange} onBlur={handleBlur} min={new Date().toISOString().split('T')[0]} required aria-invalid={!!errors.preferredDate} style={{ width: '100%', padding: '12px 16px', border: `2px solid ${errors.preferredDate ? '#EF4444' : '#E0E7FF'}`, borderRadius: '10px', fontSize: '1rem', outline: 'none' }} />
                                     {errors.preferredDate && <p style={{ color: '#DC2626', fontSize: '0.8rem', marginTop: '6px' }}>{errors.preferredDate}</p>}
                                 </div>
+
+                                {submitError && (
+                                    <p style={{
+                                        border: '1px solid #FECACA',
+                                        background: '#FEF2F2',
+                                        color: '#B91C1C',
+                                        borderRadius: '10px',
+                                        padding: '10px 12px',
+                                        margin: '0 0 16px',
+                                        fontSize: '0.84rem',
+                                        fontWeight: 600,
+                                    }}>
+                                        {submitError}
+                                    </p>
+                                )}
 
                                 <button type="submit" className="btn-primary" disabled={isSubmitting} style={{ width: '100%', justifyContent: 'center', opacity: isSubmitting ? 0.7 : 1, cursor: isSubmitting ? 'wait' : 'pointer' }}>{isSubmitting ? 'Submitting...' : 'Book Trial Playdate'}</button>
                             </form>

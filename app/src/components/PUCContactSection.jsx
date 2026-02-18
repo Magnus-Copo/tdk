@@ -1,5 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { submitWeb3Form, getWeb3FormErrorMessage } from '../lib/web3forms';
+
+const ADMISSIONS_WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_ADMISSIONS_ACCESS_KEY;
 
 const PUCFloatingInput = ({
     name,
@@ -102,6 +105,7 @@ const PUCContactSection = () => {
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState(null);
+    const [submitError, setSubmitError] = useState('');
     const [focusedField, setFocusedField] = useState(null);
     const formCardRef = useRef(null);
 
@@ -156,19 +160,55 @@ const PUCContactSection = () => {
     /** @param {React.FormEvent} e */
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!validate()) return;
+        if (!validate()) {
+            setSubmitStatus(null);
+            return;
+        }
         setIsSubmitting(true);
-        await new Promise((r) => setTimeout(r, 1800));
-        setIsSubmitting(false);
-        setSubmitStatus('success');
-        setFormData({ parentName: '', phoneNumber: '', email: '', studentName: '', stream: '', pucYear: '', message: '' });
-        setTimeout(() => setSubmitStatus(null), 4000);
+        setSubmitStatus(null);
+        setSubmitError('');
+
+        try {
+            await submitWeb3Form({
+                accessKey: ADMISSIONS_WEB3FORMS_KEY,
+                subject: `Pre-University Enquiry - ${formData.stream} (${formData.pucYear})`,
+                fromName: 'TDK Group Website - Pre-University Form',
+                replyTo: formData.email,
+                fields: {
+                    form_type: 'Pre-University Enquiry',
+                    target_email: 'londonkidshoskote@gmail.com',
+                    parent_name: formData.parentName,
+                    parent_email: formData.email,
+                    parent_phone: formData.phoneNumber,
+                    student_name: formData.studentName,
+                    stream: formData.stream,
+                    puc_year: formData.pucYear,
+                    message: formData.message || 'No additional message',
+                },
+            });
+
+            setSubmitStatus('success');
+            setFormData({ parentName: '', phoneNumber: '', email: '', studentName: '', stream: '', pucYear: '', message: '' });
+            setTimeout(() => setSubmitStatus(null), 4000);
+        } catch (error) {
+            console.error('PUC form submission failed:', error);
+            setSubmitStatus('error');
+            setSubmitError(getWeb3FormErrorMessage(error));
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleChange = (name, value) => {
         const nextValue = name === 'phoneNumber' ? value.replace(/\D/g, '').slice(0, 10) : value;
         setFormData((p) => ({ ...p, [name]: nextValue }));
         setErrors((p) => ({ ...p, [name]: validateField(name, nextValue) }));
+        if (submitStatus) {
+            setSubmitStatus(null);
+        }
+        if (submitError) {
+            setSubmitError('');
+        }
     };
 
     /* ── Contact info items ── */
@@ -718,6 +758,21 @@ const PUCContactSection = () => {
                                                     Message (Optional)
                                                 </label>
                                             </div>
+
+                                            {submitStatus === 'error' && (
+                                                <p style={{
+                                                    border: '1px solid #FECACA',
+                                                    background: '#FEF2F2',
+                                                    color: '#B91C1C',
+                                                    borderRadius: '10px',
+                                                    padding: '10px 12px',
+                                                    margin: '0 0 16px',
+                                                    fontSize: '0.84rem',
+                                                    fontWeight: 600,
+                                                }}>
+                                                    {submitError || 'Unable to send your enquiry right now. Please try again in a moment.'}
+                                                </p>
+                                            )}
 
                                             {/* Submit button */}
                                             <motion.button

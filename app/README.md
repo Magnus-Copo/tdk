@@ -1,5 +1,31 @@
 # React + TypeScript + Vite
 
+## Web3Forms Setup (All Forms)
+
+This project uses Web3Forms for form delivery.
+
+### 1) Create `.env`
+
+In the `app` folder, create a `.env` file (or copy from `.env.example`) with:
+
+```env
+VITE_WEB3FORMS_CONTACT_ACCESS_KEY=your_contact_access_key_for_info_tdkgroup_edu
+VITE_WEB3FORMS_ADMISSIONS_ACCESS_KEY=your_admissions_access_key_for_londonkidshoskote_gmail_com
+```
+
+### 2) Routing Map (implemented)
+
+- `Contact Us` form → `info@tdkgroup.edu`
+- `Pre-School` enquiry form → `londonkidshoskote@gmail.com`
+- `Primary School` enquiry form → `londonkidshoskote@gmail.com`
+- `Pre-University` enquiry form → `londonkidshoskote@gmail.com`
+- `Trial Booking` modal form → `londonkidshoskote@gmail.com`
+
+### 3) Important
+
+- The two Web3Forms access keys must each be created from the correct target inbox in Web3Forms dashboard.
+- After editing `.env`, restart the dev server (`npm run dev`).
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

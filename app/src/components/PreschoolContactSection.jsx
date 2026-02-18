@@ -1,5 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { submitWeb3Form, getWeb3FormErrorMessage } from '../lib/web3forms';
+
+const ADMISSIONS_WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_ADMISSIONS_ACCESS_KEY;
 
 const PreschoolFormField = ({
     label,
@@ -106,6 +109,7 @@ const PreschoolContactSection = () => {
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState(null);
+    const [submitError, setSubmitError] = useState('');
     const [focusedField, setFocusedField] = useState(null);
     const formCardRef = useRef(null);
 
@@ -163,19 +167,51 @@ const PreschoolContactSection = () => {
         const nextValue = name === 'phoneNumber' ? value.replace(/\D/g, '').slice(0, 10) : value;
         setFormData(prev => ({ ...prev, [name]: nextValue }));
         setErrors(prev => ({ ...prev, [name]: validateField(name, nextValue) }));
+        if (submitStatus) {
+            setSubmitStatus(null);
+        }
+        if (submitError) {
+            setSubmitError('');
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!validate()) {
+            setSubmitStatus(null);
+            return;
+        }
+
         setIsSubmitting(true);
         setSubmitStatus(null);
-        if (validate()) {
-            setTimeout(() => {
-                setSubmitStatus('success');
-                setIsSubmitting(false);
-                setFormData({ parentName: '', phoneNumber: '', email: '', childName: '', childAge: '', program: '', message: '' });
-            }, 1500);
-        } else {
+        setSubmitError('');
+
+        try {
+            await submitWeb3Form({
+                accessKey: ADMISSIONS_WEB3FORMS_KEY,
+                subject: `Pre-School Enquiry - ${formData.program}`,
+                fromName: 'TDK Group Website - Pre-School Form',
+                replyTo: formData.email,
+                fields: {
+                    form_type: 'Pre-School Enquiry',
+                    target_email: 'londonkidshoskote@gmail.com',
+                    parent_name: formData.parentName,
+                    parent_email: formData.email,
+                    parent_phone: formData.phoneNumber,
+                    child_name: formData.childName,
+                    child_age_or_dob: formData.childAge,
+                    program: formData.program,
+                    message: formData.message || 'No additional message',
+                },
+            });
+
+            setSubmitStatus('success');
+            setFormData({ parentName: '', phoneNumber: '', email: '', childName: '', childAge: '', program: '', message: '' });
+        } catch (error) {
+            console.error('Pre-school form submission failed:', error);
+            setSubmitStatus('error');
+            setSubmitError(getWeb3FormErrorMessage(error));
+        } finally {
             setIsSubmitting(false);
         }
     };
@@ -712,6 +748,21 @@ const PreschoolContactSection = () => {
                                             }}
                                         />
                                     </div>
+
+                                    {submitStatus === 'error' && (
+                                        <p style={{
+                                            border: '1px solid #FECACA',
+                                            background: '#FEF2F2',
+                                            color: '#B91C1C',
+                                            borderRadius: '10px',
+                                            padding: '10px 12px',
+                                            margin: 0,
+                                            fontSize: '0.84rem',
+                                            fontWeight: 600,
+                                        }}>
+                                            {submitError || 'Unable to send your inquiry right now. Please try again in a moment.'}
+                                        </p>
+                                    )}
 
                                     {/* Submit Button — clean, no shimmer, Framer-only transforms */}
                                     <motion.button

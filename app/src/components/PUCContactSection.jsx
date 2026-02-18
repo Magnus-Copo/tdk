@@ -27,7 +27,7 @@ const PUCFloatingInput = ({
                 onBlur={() => setFocusedField(null)}
                 inputMode={type === 'tel' ? 'numeric' : undefined}
                 maxLength={type === 'tel' ? 10 : undefined}
-                autoComplete={name === 'phoneNumber' ? 'tel' : name === 'parentName' || name === 'studentName' ? 'name' : undefined}
+                autoComplete={name === 'phoneNumber' ? 'tel' : name === 'email' ? 'email' : name === 'parentName' || name === 'studentName' ? 'name' : undefined}
                 style={{
                     width: '100%',
                     padding: '30px 16px 12px',
@@ -92,6 +92,7 @@ const PUCContactSection = () => {
     const [formData, setFormData] = useState({
         parentName: '',
         phoneNumber: '',
+        email: '',
         studentName: '',
         stream: '',
         pucYear: '',
@@ -105,6 +106,7 @@ const PUCContactSection = () => {
     const formCardRef = useRef(null);
 
     const fullNameRegex = /^[A-Za-z]+(?:[\s'-][A-Za-z]+)+$/;
+    const emailRegex = /^[a-z][a-z0-9._%+-]*@[a-z][a-z-]*(\.[a-z][a-z-]*)+$/i;
 
     const validateField = (name, value) => {
         const trimmed = String(value || '').trim();
@@ -117,6 +119,12 @@ const PUCContactSection = () => {
             case 'phoneNumber':
                 if (!trimmed) return 'Phone number is required';
                 if (!/^[6-9]\d{9}$/.test(trimmed) || /^(\d)\1{9}$/.test(trimmed)) return 'Please enter a valid 10-digit phone number';
+                return '';
+            case 'email':
+                if (!trimmed) return 'Email address is required';
+                if (!emailRegex.test(trimmed)) {
+                    return 'Use a valid email (must start with a letter and domain after @ cannot start with a number)';
+                }
                 return '';
             case 'studentName':
                 if (!trimmed) return 'Student name is required';
@@ -136,7 +144,7 @@ const PUCContactSection = () => {
     /** @returns {boolean} */
     const validate = () => {
         const newErrors = {};
-        ['parentName', 'phoneNumber', 'studentName', 'stream', 'pucYear'].forEach((fieldName) => {
+        ['parentName', 'phoneNumber', 'email', 'studentName', 'stream', 'pucYear'].forEach((fieldName) => {
             const error = validateField(fieldName, formData[fieldName]);
             if (error) newErrors[fieldName] = error;
         });
@@ -153,7 +161,7 @@ const PUCContactSection = () => {
         await new Promise((r) => setTimeout(r, 1800));
         setIsSubmitting(false);
         setSubmitStatus('success');
-        setFormData({ parentName: '', phoneNumber: '', studentName: '', stream: '', pucYear: '', message: '' });
+        setFormData({ parentName: '', phoneNumber: '', email: '', studentName: '', stream: '', pucYear: '', message: '' });
         setTimeout(() => setSubmitStatus(null), 4000);
     };
 
@@ -514,6 +522,7 @@ const PUCContactSection = () => {
                                 >
                                     <PUCFloatingInput name="parentName" label="Parent / Guardian Name *" focusedField={focusedField} errors={errors} formData={formData} handleChange={handleChange} setFocusedField={setFocusedField} />
                                     <PUCFloatingInput name="phoneNumber" label="Phone Number *" type="tel" focusedField={focusedField} errors={errors} formData={formData} handleChange={handleChange} setFocusedField={setFocusedField} />
+                                    <PUCFloatingInput name="email" label="Email Address *" type="email" focusedField={focusedField} errors={errors} formData={formData} handleChange={handleChange} setFocusedField={setFocusedField} />
                                     <PUCFloatingInput name="studentName" label="Student Name *" focusedField={focusedField} errors={errors} formData={formData} handleChange={handleChange} setFocusedField={setFocusedField} />
 
                                     {/* Stream dropdown */}

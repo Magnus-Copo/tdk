@@ -14,7 +14,7 @@ const BookingModal = () => {
     const [errors, setErrors] = useState({});
 
     const fullNameRegex = /^[A-Za-z]+(?:[\s'-][A-Za-z]+)+$/;
-    const gmailRegex = /^[A-Za-z][A-Za-z0-9._%+-]*@gmail\.com$/i;
+    const emailRegex = /^[a-z][a-z0-9._%+-]*@[a-z][a-z-]*(\.[a-z][a-z-]*)+$/i;
 
     const resetForm = () => {
         setFormData({
@@ -40,7 +40,7 @@ const BookingModal = () => {
                 return '';
             case 'email':
                 if (!trimmed) return 'Email is required';
-                if (!gmailRegex.test(trimmed)) return 'Use a valid Gmail (must start with a letter and end with @gmail.com)';
+                if (!emailRegex.test(trimmed)) return 'Use a valid email (must start with a letter and domain after @ cannot start with a number)';
                 return '';
             case 'phone': {
                 if (!trimmed) return 'Phone number is required';

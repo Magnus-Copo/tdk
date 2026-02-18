@@ -50,7 +50,7 @@ const PrimaryFormField = ({
                 onBlur={() => setFocusedField(null)}
                 inputMode={type === 'tel' ? 'numeric' : undefined}
                 maxLength={type === 'tel' ? 10 : undefined}
-                autoComplete={name === 'phoneNumber' ? 'tel' : name === 'parentName' || name === 'studentName' ? 'name' : undefined}
+                autoComplete={name === 'phoneNumber' ? 'tel' : name === 'email' ? 'email' : name === 'parentName' || name === 'studentName' ? 'name' : undefined}
                 style={{
                     width: '100%',
                     padding: '30px 16px 12px',
@@ -98,6 +98,7 @@ const PrimaryContactSection = () => {
     const [formData, setFormData] = useState({
         parentName: '',
         phoneNumber: '',
+        email: '',
         studentName: '',
         studentGrade: '',
         program: '',
@@ -111,6 +112,7 @@ const PrimaryContactSection = () => {
     const formCardRef = useRef(null);
 
     const fullNameRegex = /^[A-Za-z]+(?:[\s'-][A-Za-z]+)+$/;
+    const emailRegex = /^[a-z][a-z0-9._%+-]*@[a-z][a-z-]*(\.[a-z][a-z-]*)+$/i;
 
     const validateField = (name, value) => {
         const trimmed = String(value || '').trim();
@@ -123,6 +125,12 @@ const PrimaryContactSection = () => {
             case 'phoneNumber':
                 if (!trimmed) return 'Phone number is required';
                 if (!/^[6-9]\d{9}$/.test(trimmed) || /^(\d)\1{9}$/.test(trimmed)) return 'Please enter a valid 10-digit phone number';
+                return '';
+            case 'email':
+                if (!trimmed) return 'Email address is required';
+                if (!emailRegex.test(trimmed)) {
+                    return 'Use a valid email (must start with a letter and domain after @ cannot start with a number)';
+                }
                 return '';
             case 'studentName':
                 if (!trimmed) return "Student's name is required";
@@ -142,7 +150,7 @@ const PrimaryContactSection = () => {
     /** @returns {boolean} */
     const validate = () => {
         const newErrors = {};
-        ['parentName', 'phoneNumber', 'studentName', 'studentGrade', 'program'].forEach((fieldName) => {
+        ['parentName', 'phoneNumber', 'email', 'studentName', 'studentGrade', 'program'].forEach((fieldName) => {
             const error = validateField(fieldName, formData[fieldName]);
             if (error) newErrors[fieldName] = error;
         });
@@ -165,7 +173,7 @@ const PrimaryContactSection = () => {
             setTimeout(() => {
                 setSubmitStatus('success');
                 setIsSubmitting(false);
-                setFormData({ parentName: '', phoneNumber: '', studentName: '', studentGrade: '', program: '', message: '' });
+                setFormData({ parentName: '', phoneNumber: '', email: '', studentName: '', studentGrade: '', program: '', message: '' });
             }, 1500);
         } else {
             setIsSubmitting(false);
@@ -569,6 +577,11 @@ const PrimaryContactSection = () => {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <PrimaryFormField label="Parent's Name" name="parentName" focusedField={focusedField} errors={errors} formData={formData} handleChange={handleChange} setFocusedField={setFocusedField} />
                                         <PrimaryFormField label="Phone Number" name="phoneNumber" type="tel" focusedField={focusedField} errors={errors} formData={formData} handleChange={handleChange} setFocusedField={setFocusedField} />
+                                    </div>
+
+                                    {/* Row 1.5 */}
+                                    <div className="grid grid-cols-1 gap-4">
+                                        <PrimaryFormField label="Email Address" name="email" type="email" focusedField={focusedField} errors={errors} formData={formData} handleChange={handleChange} setFocusedField={setFocusedField} />
                                     </div>
 
                                     {/* Row 2 */}

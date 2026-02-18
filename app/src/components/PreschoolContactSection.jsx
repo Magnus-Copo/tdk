@@ -50,7 +50,7 @@ const PreschoolFormField = ({
                 onBlur={() => setFocusedField(null)}
                 inputMode={type === 'tel' ? 'numeric' : undefined}
                 maxLength={type === 'tel' ? 10 : undefined}
-                autoComplete={name === 'phoneNumber' ? 'tel' : name === 'parentName' || name === 'childName' ? 'name' : undefined}
+                autoComplete={name === 'phoneNumber' ? 'tel' : name === 'email' ? 'email' : name === 'parentName' || name === 'childName' ? 'name' : undefined}
                 style={{
                     width: '100%',
                     padding: '30px 16px 12px',
@@ -96,6 +96,7 @@ const PreschoolContactSection = () => {
     const [formData, setFormData] = useState({
         parentName: '',
         phoneNumber: '',
+        email: '',
         childName: '',
         childAge: '',
         program: '',
@@ -109,6 +110,7 @@ const PreschoolContactSection = () => {
     const formCardRef = useRef(null);
 
     const fullNameRegex = /^[A-Za-z]+(?:[\s'-][A-Za-z]+)+$/;
+    const emailRegex = /^[a-z][a-z0-9._%+-]*@[a-z][a-z-]*(\.[a-z][a-z-]*)+$/i;
 
     const validateField = (name, value) => {
         const trimmed = String(value || '').trim();
@@ -125,6 +127,12 @@ const PreschoolContactSection = () => {
                 }
                 return '';
             }
+            case 'email':
+                if (!trimmed) return 'Email address is required';
+                if (!emailRegex.test(trimmed)) {
+                    return 'Use a valid email (must start with a letter and domain after @ cannot start with a number)';
+                }
+                return '';
             case 'childName':
                 if (!trimmed) return "Child's name is required";
                 if (!fullNameRegex.test(trimmed)) return 'Enter full name (first and last name)';
@@ -142,7 +150,7 @@ const PreschoolContactSection = () => {
 
     const validate = () => {
         const newErrors = {};
-        ['parentName', 'phoneNumber', 'childName', 'childAge', 'program'].forEach((fieldName) => {
+        ['parentName', 'phoneNumber', 'email', 'childName', 'childAge', 'program'].forEach((fieldName) => {
             const error = validateField(fieldName, formData[fieldName]);
             if (error) newErrors[fieldName] = error;
         });
@@ -165,7 +173,7 @@ const PreschoolContactSection = () => {
             setTimeout(() => {
                 setSubmitStatus('success');
                 setIsSubmitting(false);
-                setFormData({ parentName: '', phoneNumber: '', childName: '', childAge: '', program: '', message: '' });
+                setFormData({ parentName: '', phoneNumber: '', email: '', childName: '', childAge: '', program: '', message: '' });
             }, 1500);
         } else {
             setIsSubmitting(false);
@@ -570,6 +578,11 @@ const PreschoolContactSection = () => {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <PreschoolFormField label="Parent's Name" name="parentName" focusedField={focusedField} errors={errors} formData={formData} handleChange={handleChange} setFocusedField={setFocusedField} />
                                         <PreschoolFormField label="Phone Number" name="phoneNumber" type="tel" focusedField={focusedField} errors={errors} formData={formData} handleChange={handleChange} setFocusedField={setFocusedField} />
+                                    </div>
+
+                                    {/* Row 1.5 */}
+                                    <div className="grid grid-cols-1 gap-5">
+                                        <PreschoolFormField label="Email Address" name="email" type="email" focusedField={focusedField} errors={errors} formData={formData} handleChange={handleChange} setFocusedField={setFocusedField} />
                                     </div>
 
                                     {/* Row 2 */}

@@ -19,7 +19,7 @@ const Contact = () => {
     const [submitStatus, setSubmitStatus] = useState(null);
 
     const fullNameRegex = /^[A-Za-z]+(?:[\s'-][A-Za-z]+)+$/;
-    const gmailRegex = /^[A-Za-z][A-Za-z0-9._%+-]*@gmail\.com$/i;
+    const emailRegex = /^[a-z][a-z0-9._%+-]*@[a-z][a-z-]*(\.[a-z][a-z-]*)+$/i;
 
     const validateField = (name, value) => {
         const trimmed = value.trim();
@@ -32,8 +32,8 @@ const Contact = () => {
             }
             case 'email': {
                 if (!trimmed) return 'Email address is required';
-                if (!gmailRegex.test(trimmed)) {
-                    return 'Use a valid Gmail (must start with a letter and end with @gmail.com)';
+                if (!emailRegex.test(trimmed)) {
+                    return 'Use a valid email (must start with a letter and domain after @ cannot start with a number)';
                 }
                 return '';
             }
